@@ -1,27 +1,24 @@
 #!/bin/bash
 # ============================================================
 # design-system skill — installer
-# One skill.md, symlinked to all supported agents globally.
-# Per-project hooks (AGENTS.md, .agent/, .cursor/) are written
-# automatically by the skill on first use in each project.
-#
-# Targets: Claude, Codex, OpenCode, Gemini CLI, Copilot CLI,
-#          Hermes, Google Antigravity, Aider, Trae, Cursor
+# Downloads skill.md from GitHub to a stable local path,
+# then symlinks that one file to all supported agents.
+# Works correctly with: curl -fsSL https://raw.githubusercontent.com/Jaywalker-not-a-whitewalker/DesignSystem/main/install.sh | bash
 # ============================================================
 
 set -e
 
-SKILL_DIR="$(cd "$(dirname "$0")" && pwd)"
-SKILL_FILE="$SKILL_DIR/skill.md"
+REPO_RAW="https://raw.githubusercontent.com/Jaywalker-not-a-whitewalker/DesignSystem/main"
+INSTALL_HOME="$HOME/.design-system"
+SKILL_FILE="$INSTALL_HOME/skill.md"
 INSTALLED=()
 FAILED=()
 
-# ── helper ──────────────────────────────────────────────────
+# ── helper: create dir + symlink ────────────────────────────
 symlink() {
   local dest_dir="$1"
   local dest_file="$2"
   mkdir -p "$dest_dir"
-  # Remove existing link or file at destination
   [ -e "$dest_file" ] || [ -L "$dest_file" ] && rm -f "$dest_file"
   ln -s "$SKILL_FILE" "$dest_file"
 }
@@ -30,71 +27,70 @@ echo ""
 echo "design-system — installing..."
 echo ""
 
-# ── Claude Code ─────────────────────────────────────────────
-# Reads from: ~/.claude/skills/<name>/skill.md
+# ── 1. Download skill.md to stable location ─────────────────
+mkdir -p "$INSTALL_HOME"
+curl -fsSL "$REPO_RAW/skill.md" -o "$SKILL_FILE"
+
+if [ ! -f "$SKILL_FILE" ]; then
+  echo "Error: failed to download skill.md"
+  exit 1
+fi
+
+echo "Downloaded skill.md -> $SKILL_FILE"
+echo ""
+
+# ── 2. Symlink to all agents ─────────────────────────────────
+
+# Claude Code
 D="$HOME/.claude/skills/design-system"
 symlink "$D" "$D/skill.md" \
-  && INSTALLED+=("Claude      $D/skill.md") \
+  && INSTALLED+=("Claude       $D/skill.md") \
   || FAILED+=("Claude")
 
-# ── Codex ────────────────────────────────────────────────────
-# Reads from: ~/.codex/skills/<name>/skill.md
+# Codex
 D="$HOME/.codex/skills/design-system"
 symlink "$D" "$D/skill.md" \
-  && INSTALLED+=("Codex       $D/skill.md") \
+  && INSTALLED+=("Codex        $D/skill.md") \
   || FAILED+=("Codex")
 
-# ── OpenCode ─────────────────────────────────────────────────
-# Reads from: ~/.opencode/skills/<name>/skill.md
+# OpenCode
 D="$HOME/.opencode/skills/design-system"
 symlink "$D" "$D/skill.md" \
-  && INSTALLED+=("OpenCode    $D/skill.md") \
+  && INSTALLED+=("OpenCode     $D/skill.md") \
   || FAILED+=("OpenCode")
 
-# ── Gemini CLI ───────────────────────────────────────────────
-# Reads from: ~/.gemini/skills/<name>/SKILL.md
+# Gemini CLI
 D="$HOME/.gemini/skills/design-system"
 symlink "$D" "$D/SKILL.md" \
-  && INSTALLED+=("Gemini CLI  $D/SKILL.md") \
+  && INSTALLED+=("Gemini CLI   $D/SKILL.md") \
   || FAILED+=("Gemini CLI")
 
-# ── GitHub Copilot CLI ───────────────────────────────────────
-# Reads from: ~/.copilot/skills/<name>/skill.md
+# GitHub Copilot CLI
 D="$HOME/.copilot/skills/design-system"
 symlink "$D" "$D/skill.md" \
-  && INSTALLED+=("Copilot CLI $D/skill.md") \
+  && INSTALLED+=("Copilot CLI  $D/skill.md") \
   || FAILED+=("Copilot CLI")
 
-# ── Hermes ───────────────────────────────────────────────────
+# Hermes
 D="$HOME/.hermes/skills/design-system"
 symlink "$D" "$D/skill.md" \
-  && INSTALLED+=("Hermes      $D/skill.md") \
+  && INSTALLED+=("Hermes       $D/skill.md") \
   || FAILED+=("Hermes")
 
-# ── Google Antigravity ───────────────────────────────────────
-# Global rules: ~/.config/antigravity/rules/<name>.md
-# Per-project:  .agent/rules/ + .agent/workflows/  (written by skill on first use)
+# Google Antigravity (global rules)
 D="$HOME/.config/antigravity/rules"
 symlink "$D" "$D/design-system.md" \
-  && INSTALLED+=("Antigravity $D/design-system.md  (+ .agent/ per project)") \
+  && INSTALLED+=("Antigravity  $D/design-system.md  (+ .agent/ per project)") \
   || FAILED+=("Antigravity")
 
-# ── Aider / Trae / OpenClaw / Factory Droid ──────────────────
-# These rely on AGENTS.md only — written per project by the skill.
-# No global skill directory for these agents.
-
-# ── Cursor ───────────────────────────────────────────────────
-# Per-project .cursor/rules/design-system.mdc — written by skill on first use.
-# No global skill directory for Cursor.
-
-# ── Summary ─────────────────────────────────────────────────
+# ── 3. Summary ───────────────────────────────────────────────
 echo "Installed (all symlinked -> $SKILL_FILE):"
 for item in "${INSTALLED[@]}"; do
   echo "  ✓  $item"
 done
 
 echo ""
-echo "Per-project only (written by the skill on first use in each project):"
+echo "Per-project only (written by the skill on first use):"
 echo "  ->  AGENTS.md                       Claude, Codex, OpenCode, Aider, Trae, Hermes"
 echo "  ->  .agent/rules/design-system.md   Antigravity always-on rules"
 echo "  ->  .agent/workflows/               Antigravity /design slash command"
@@ -109,16 +105,13 @@ if [ ${#FAILED[@]} -gt 0 ]; then
 fi
 
 echo ""
-echo "Update the skill at any time — all agents pick it up automatically."
+echo "To update the skill later:"
+echo "  curl -fsSL $REPO_RAW/skill.md -o $SKILL_FILE"
+echo "  (all agent symlinks update automatically)"
 echo ""
 echo "How to use:"
 echo "  cd your-project"
 echo "  Say:  new project"
 echo "  Or:   create design system"
 echo "  Or:   /design"
-echo ""
-echo "The skill will:"
-echo "  1. Run the 6-step onboarding flow"
-echo "  2. Write Design.md to your project root"
-echo "  3. Write per-agent hook files so all agents auto-load the system"
 echo ""
