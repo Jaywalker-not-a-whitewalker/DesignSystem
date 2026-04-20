@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Preview — <!--APP_NAME--></title>
+
+  <!-- DESIGN_TOKENS injected by skill below this line -->
+  <!--TOKENS_SCRIPT-->
+
+  <!-- Fonts loaded from CDN in DESIGN_TOKENS -->
+  <link id="font-cdn" rel="stylesheet"
+    href="https://api.fontshare.com/v2/css?f[]=satoshi@700,500&f[]=inter@400,500&display=swap" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── Topbar ───────────────────────────────────────────────── -->
+<header class="topbar">
+  <span class="topbar-title" id="meta-appName">My App</span>
+  <div class="topbar-meta">
+    <span class="meta-badge" id="meta-formFactor">Mobile App</span>
+    <span class="meta-badge" id="meta-appType">Productivity</span>
+    <span class="meta-badge" id="meta-framework">Flutter</span>
+    <span class="meta-badge" id="meta-targetUser">General users</span>
+    <span class="meta-badge" id="meta-vibeWords">calm, minimal, focused</span>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost" id="theme-toggle">☾ Dark</button>
+  </div>
+</header>
+
+<!-- ── Main 3-panel layout ─────────────────────────────────── -->
+<div class="layout">
+
+  <!-- ── LEFT PANEL: Token Editor ─────────────────────────── -->
+  <aside class="panel" id="panel-tokens">
+
+    <div class="panel-section">
+      <div class="panel-heading">Colors — Light Mode</div>
+      <div class="color-row"><label>Background</label>
+        <input type="color" data-token="light.bg" value="#F8F9FA" />
+        <span class="color-hex">#F8F9FA</span></div>
+      <div class="color-row"><label>Surface</label>
+        <input type="color" data-token="light.surface" value="#FFFFFF" />
+        <span class="color-hex">#FFFFFF</span></div>
+      <div class="color-row"><label>Surface 2</label>
+        <input type="color" data-token="light.surface2" value="#F1F3F5" />
+        <span class="color-hex">#F1F3F5</span></div>
+      <div class="color-row"><label>Surface Offset</label>
+        <input type="color" data-token="light.surfaceOffset" value="#E9ECEF" />
+        <span class="color-hex">#E9ECEF</span></div>
+      <div class="color-row"><label>Text</label>
+        <input type="color" data-token="light.text" value="#212529" />
+        <span class="color-hex">#212529</span></div>
+      <div class="color-row"><label>Text Muted</label>
+        <input type="color" data-token="light.textMuted" value="#6C757D" />
+        <span class="color-hex">#6C757D</span></div>
+      <div class="color-row"><label>Text Faint</label>
+        <input type="color" data-token="light.textFaint" value="#ADB5BD" />
+        <span class="color-hex">#ADB5BD</span></div>
+      <div class="color-row"><label>Primary</label>
+        <input type="color" data-token="light.primary" value="#2F80ED" />
+        <span class="color-hex">#2F80ED</span></div>
+      <div class="color-row"><label>Primary Hover</label>
+        <input type="color" data-token="light.primaryHover" value="#1A6FD6" />
+        <span class="color-hex">#1A6FD6</span></div>
+      <div class="color-row"><label>Error</label>
+        <input type="color" data-token="light.error" value="#E03131" />
+        <span class="color-hex">#E03131</span></div>
+      <div class="color-row"><label>Warning</label>
+        <input type="color" data-token="light.warning" value="#F08C00" />
+        <span class="color-hex">#F08C00</span></div>
+      <div class="color-row"><label>Success</label>
+        <input type="color" data-token="light.success" value="#2F9E44" />
+        <span class="color-hex">#2F9E44</span></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-heading">Colors — Dark Mode</div>
+      <div class="color-row"><label>Background</label>
+        <input type="color" data-token="dark.bg" value="#0D1117" />
+        <span class="color-hex">#0D1117</span></div>
+      <div class="color-row"><label>Surface</label>
+        <input type="color" data-token="dark.surface" value="#161B22" />
+        <span class="color-hex">#161B22</span></div>
+      <div class="color-row"><label>Surface 2</label>
+        <input type="color" data-token="dark.surface2" value="#1C2128" />
+        <span class="color-hex">#1C2128</span></div>
+      <div class="color-row"><label>Text</label>
+        <input type="color" data-token="dark.text" value="#E6EDF3" />
+        <span class="color-hex">#E6EDF3</span></div>
+      <div class="color-row"><label>Text Muted</label>
+        <input type="color" data-token="dark.textMuted" value="#8B949E" />
+        <span class="color-hex">#8B949E</span></div>
+      <div class="color-row"><label>Primary</label>
+        <input type="color" data-token="dark.primary" value="#4493F8" />
+        <span class="color-hex">#4493F8</span></div>
+      <div class="color-row"><label>Error</label>
+        <input type="color" data-token="dark.error" value="#F85149" />
+        <span class="color-hex">#F85149</span></div>
+      <div class="color-row"><label>Success</label>
+        <input type="color" data-token="dark.success" value="#3FB950" />
+        <span class="color-hex">#3FB950</span></div>
+    </div>
+
+  </aside>
+
+  <!-- ── CENTER: Device Preview ───────────────────────────── -->
+  <main class="stage">
+    <div class="device-frame device-mobile" id="device-frame">
+
+      <!-- Web bar (shown for device-web only) -->
+      <div class="device-web-bar" id="web-bar" style="display:none">
+        <span class="device-dot" style="background:#FF5F57"></span>
+        <span class="device-dot" style="background:#FFBD2E"></span>
+        <span class="device-dot" style="background:#28C840"></span>
+      </div>
+
+      <div class="device-screen">
+
+        <!-- App Bar -->
+        <div class="preview-section" style="padding:16px;background:var(--color-surface);
+          border-bottom:1px solid var(--color-border);display:flex;
+          align-items:center;justify-content:space-between;">
+          <span style="font-family:var(--font-display);font-weight:700;
+            font-size:17px;color:var(--color-text)" id="screen-appname">My App</span>
+          <div style="display:flex;gap:8px">
+            <span class="preview-badge badge-success">Active</span>
+          </div>
+        </div>
+
+        <!-- Hero card -->
+        <div class="preview-section">
+          <div class="preview-label">Featured</div>
+          <div class="preview-card">
+            <div class="preview-title" style="font-size:18px">Welcome back</div>
+            <div class="preview-body">Here is what is happening today across your workspace.</div>
+            <div class="preview-btn-row">
+              <button class="preview-btn preview-btn-primary">Get started</button>
+              <button class="preview-btn preview-btn-ghost">Learn more</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="preview-section">
+          <div class="preview-label">Overview</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="preview-card" style="padding:12px">
+              <div style="font-size:11px;color:var(--color-text-faint);margin-bottom:4px">TASKS</div>
+              <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--color-text)">24</div>
+            </div>
+            <div class="preview-card" style="padding:12px">
+              <div style="font-size:11px;color:var(--color-text-faint);margin-bottom:4px">DONE</div>
+              <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--color-success)">18</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="preview-section">
+          <div class="preview-label">Quick add</div>
+          <input class="preview-input" placeholder="Type a task name..." />
+          <div style="display:flex;gap:6px">
+            <span class="preview-badge badge-success">✓ Done</span>
+            <span class="preview-badge badge-warning">⏳ Pending</span>
+            <span class="preview-badge badge-error">✗ Blocked</span>
+          </div>
+        </div>
+
+        <!-- List -->
+        <div class="preview-section">
+          <div class="preview-label">Recent</div>
+          <div class="preview-card" style="padding:12px 16px;display:flex;
+            justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:14px;font-weight:500;color:var(--color-text)">Design system review</div>
+              <div style="font-size:12px;color:var(--color-text-muted)">Today at 3:00 PM</div>
+            </div>
+            <span class="preview-badge badge-success">Done</span>
+          </div>
+          <div class="preview-card" style="padding:12px 16px;display:flex;
+            justify-content:space-between;align-items:center;margin-top:4px">
+            <div>
+              <div style="font-size:14px;font-weight:500;color:var(--color-text)">Ship preview feature</div>
+              <div style="font-size:12px;color:var(--color-text-muted)">Tomorrow</div>
+            </div>
+            <span class="preview-badge badge-warning">Pending</span>
+          </div>
+        </div>
+
+        <!-- Bottom nav (mobile) -->
+        <div class="mobile-nav" id="mobile-nav">
+          <div class="nav-item active">
+            <span class="nav-icon">⊞</span>
+            <span>Home</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">○</span>
+            <span>Tasks</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">△</span>
+            <span>Stats</span>
+          </div>
+          <div class="nav-item">
+            <span class="nav-icon">◯</span>
+            <span>Profile</span>
+          </div>
+        </div>
+
+      </div><!-- /device-screen -->
+    </div><!-- /device-frame -->
+  </main>
+
+  <!-- ── RIGHT PANEL: Audit + Export ──────────────────────── -->
+  <aside class="panel" id="panel-audit">
+
+    <div class="panel-section">
+      <div class="panel-heading">Contrast Audit</div>
+      <div id="audit-results"></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-heading">Spacing Audit (8pt grid)</div>
+      <div id="spacing-audit"></div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-heading">Export Tokens</div>
+      <button class="btn btn-primary" id="sync-now" style="width:100%;margin-bottom:12px;justify-content:center">⟳ Sync to disk</button>
+      <div id="server-badge" style="font-size:11px;margin-bottom:12px;color:var(--color-text-faint)">○ Checking...</div>
+      <button class="export-btn" id="export-json">
+        <span>design-tokens.json</span>
+        <span class="export-icon">↓</span>
+      </button>
+      <button class="export-btn" id="export-md">
+        <span>Design.md</span>
+        <span class="export-icon">↓</span>
+      </button>
+      <button class="export-btn" id="export-css">
+        <span>tokens.css (:root)</span>
+        <span class="export-icon">↓</span>
+      </button>
+      <button class="export-btn" id="export-tailwind">
+        <span>tailwind.config.js</span>
+        <span class="export-icon">↓</span>
+      </button>
+      <button class="export-btn" id="export-flutter">
+        <span>design_tokens.dart</span>
+        <span class="export-icon">↓</span>
+      </button>
+    </div>
+
+  </aside>
+
+</div><!-- /layout -->
+
+<script type="module" src="app.js"></script>
+
+<script>
+  // Sync hex labels on color picker input
+  document.querySelectorAll('input[type=color]').forEach(input => {
+    const hex = input.nextElementSibling;
+    input.addEventListener('input', () => { if (hex) hex.textContent = input.value; });
+  });
+  // Show/hide web bar based on device type
+  const ff = (typeof DESIGN_TOKENS !== 'undefined')
+    ? DESIGN_TOKENS.meta.formFactor.toLowerCase() : 'mobile';
+  if (ff.includes('website') || ff.includes('web')) {
+    document.getElementById('web-bar').style.display = 'flex';
+    document.getElementById('mobile-nav').style.display = 'none';
+  }
+  if (ff.includes('wearable')) {
+    document.getElementById('mobile-nav').style.display = 'none';
+  }
+  // Set screen app name
+  const nameEl = document.getElementById('screen-appname');
+  if (nameEl && typeof DESIGN_TOKENS !== 'undefined') {
+    nameEl.textContent = DESIGN_TOKENS.meta.appName;
+  }
+</script>
+
+</body>
+</html>
