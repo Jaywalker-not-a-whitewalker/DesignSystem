@@ -1,3 +1,10 @@
+---
+name: design-system
+description: "Generates production-ready design systems with tokens-first architecture, atomic components, and HTML preview for websites, mobile apps, and wearables. Runs 6-step onboarding (form factor, app type, framework, identity, visual reference, color direction) and produces design-tokens.json, Design.md, and preview.html."
+risk: safe
+date_added: "2026-04-20"
+---
+
 # SKILL.md — Design System Generator
 
 ## Skill Identity
