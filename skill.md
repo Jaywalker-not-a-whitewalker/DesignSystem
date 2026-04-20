@@ -307,12 +307,95 @@ Structure of the generated `Design.md`:
 
 ## Phase 4 — HTML Preview Generation
 
-Generate a self-contained `preview.html` with:
+**How to generate the HTML preview:**
 
-1. **Token Panel** — live color swatches, type scale, spacing scale
-2. **Component Showcase** — every atom and molecule rendered with real token values
-3. **Page Template Preview** — one sample layout based on app type
-4. **Developer Options Panel** — toggle dark/light mode, change primary color, preview on mobile/desktop viewport
+The preview system uses a template-based approach. Follow these exact steps:
+
+### Step 1: Read the template
+
+Read the file from `~/.design-system/preview/index.html`. This template contains:
+- `<!--TOKENS_SCRIPT-->` — placeholder for injecting the DESIGN_TOKENS JavaScript object
+- `<!--APP_NAME-->` — placeholder for the app name
+- Pre-wired UI with `app.js`, `style.css`, and all interactive components already built
+
+### Step 2: Build the DESIGN_TOKENS object
+
+Create a JavaScript object containing all the design tokens you generated in Phase 1:
+
+```javascript
+const DESIGN_TOKENS = {
+  meta: {
+    appName: "...",
+    formFactor: "...",
+    appType: "...",
+    framework: "...",
+    targetUser: "...",
+    coreAction: "...",
+    vibeWords: "..."
+  },
+  color: {
+    light: {
+      bg: "#...",
+      surface: "#...",
+      text: "#...",
+      primary: "#...",
+      // ... all light mode colors
+    },
+    dark: {
+      bg: "#...",
+      surface: "#...",
+      // ... all dark mode colors  
+    }
+  },
+  typography: {
+    fontFamily: { display: "...", body: "...", mono: "..." },
+    fontSize: { xs: "...", sm: "...", base: "...", lg: "...", xl: "...", "2xl": "...", "3xl": "..." },
+    fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
+    lineHeight: { tight: "...", normal: "...", relaxed: "..." }
+  },
+  spacing: {
+    base: "8px",
+    scale: { "1": "4px", "2": "8px", "3": "12px", "4": "16px", "6": "24px", "8": "32px", "10": "40px", "12": "48px", "16": "64px" }
+  },
+  borderRadius: {
+    none: "0", sm: "4px", md: "8px", lg: "12px", xl: "16px", full: "9999px"
+  },
+  shadow: {
+    sm: "...", md: "...", lg: "...", xl: "..."
+  }
+};
+```
+
+### Step 3: Inject tokens into template
+
+Replace the placeholders in the template:
+
+1. Replace `<!--TOKENS_SCRIPT-->` with:
+   ```html
+   <script>
+   const DESIGN_TOKENS = { /* full object from Step 2 */ };
+   </script>
+   ```
+
+2. Replace `<!--APP_NAME-->` with the actual app name from `DESIGN_TOKENS.meta.appName`
+
+### Step 4: Write the preview file
+
+Write the modified HTML to `preview.html` in the **project root directory** (not in ~/.design-system/).
+
+### Step 5: Inform the user
+
+Tell the user:
+```
+Preview generated: preview.html
+
+To view it:
+  1. Open preview.html in a browser, OR
+  2. Run: node ~/.design-system/preview/server.js --project .
+     Then open: http://localhost:7743
+```
+
+**IMPORTANT:** Do not try to generate the preview from scratch. The template already has all the UI, styling, contrast checking, and export logic built-in. Your only job is to inject the DESIGN_TOKENS object.
 
 ### Reasoning Transparency in HTML:
 Every section must include an expandable `<!-- WHY -->` comment or on-page tooltip explaining:
