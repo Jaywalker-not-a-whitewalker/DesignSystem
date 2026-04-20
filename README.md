@@ -1,35 +1,43 @@
 # design-system
 
-**An AI coding assistant skill.** Say `new project`, `create design system`, or `/design` in Claude Code, Codex, OpenCode, Cursor, Gemini CLI, GitHub Copilot CLI, Aider, Hermes, Trae, or Google Antigravity — it runs a guided onboarding flow, builds a complete `Design.md` for your project, and makes every agent auto-load your design system before writing any UI code.
+> **v2.0** — skill.md | One source of truth. All agents stay in sync.
 
-One `skill.md`. One source of truth. All agents stay in sync.
+**An AI coding assistant skill.** Say `new project`, `create design system`, or `/design` in Claude Code, Codex, OpenCode, Cursor, Gemini CLI, GitHub Copilot CLI, Aider, Hermes, Trae, or Google Antigravity — it runs a guided 6-step onboarding flow, builds a complete `Design.md` for your project, and makes every agent auto-load your design system before writing any UI code.
 
 ```
 Design.md                    ← generated per project
-├── Color tokens             (light + dark mode, OKLCH-based)
-├── Typography               (fluid clamp scale, display + body fonts)
-├── Spacing                  (4px base, 8pt rhythm — strictly enforced)
-├── Isolation rules          (surface shift, whitespace, divider, border, color fill)
-├── Visual hierarchy rules   (one primary action, text levels, accent restraint)
-├── Component vocabulary     (derived from app type — landing, SaaS, mobile, etc.)
-└── Audit log                (violations appended automatically)
+├── design-tokens.json         (source of truth — colors, type, spacing, motion)
+├── Color tokens               (light + dark mode, OKLCH-based)
+├── Typography                 (fluid clamp scale, display + body fonts)
+├── Spacing                    (8pt grid — strictly enforced)
+├── Isolation rules            (surface shift, whitespace, divider, border, color fill)
+├── Visual hierarchy rules     (one primary action, text levels, accent restraint)
+├── Component vocabulary       (atoms → molecules → organisms, derived from app type)
+└── Audit log                  (violations appended automatically)
 ```
 
 ---
 
 ## How it works
 
-On first use in a project, the skill runs a 6-step onboarding flow:
+On first use in a project, the skill runs a structured 6-step onboarding flow:
 
-1. **Form factor** — Website / Mobile App / Wearable / Desktop
-2. **App type** — Landing page, SaaS, e-commerce, social, productivity, etc. (drives all design decisions)
-3. **Framework** — React/Next.js, Flutter, SwiftUI, Vanilla HTML, etc. (affects code output only)
-4. **App identity** — Name, target user, and three vibe words (e.g. calm, minimal, focused)
-5. **Visual reference** — URL, screenshot, or describe a vibe (optional but high value)
-6. **Color direction** — Extracted from logo, chosen from AI-generated options, or provided manually
+1. **Form factor** — Website / Mobile App / Wearable / Desktop App
+2. **App type** — Landing page, SaaS dashboard, social app, productivity tool, etc. (drives all design decisions)
+3. **Framework / Platform** — React/Next.js, Flutter, SwiftUI, Vanilla HTML, etc. (affects code output only)
+4. **App identity** — Name, target user, core action, and three vibe words (e.g. warm, trustworthy, modern)
+5. **Visual reference** — URL, logo, screenshot, or "feels like [App X]" (optional but highest-value input)
+6. **Color direction** — Extracted from logo, chosen from AI-generated palette options, or provided manually
 
-The skill then writes:
+> **App type comes before framework** — design rules are driven by what the app *does*, not how it's built.
+
+The skill then generates (based on your chosen output format):
+
+- `design-tokens.json` — canonical token source (always generated first)
 - `Design.md` — your complete design system
+- `preview.html` — interactive HTML with token panel, component showcase, and developer toggles
+- `tailwind.config.js` — Tailwind CSS token mapping
+- Flutter `ThemeData` — Dart theme file
 - `AGENTS.md` — always-on hook for Claude, Codex, OpenCode, Aider, Trae, Hermes
 - `.agent/rules/design-system.md` — Google Antigravity always-on rules
 - `.agent/workflows/design-system.md` — Google Antigravity `/design` slash command
@@ -109,18 +117,18 @@ check src/components/Card.tsx
 ```
 DESIGN AUDIT — Card.tsx
 ----------------------------------------
-PASSES     (9)
+PASSES (9)
   Spacing: all values on 8pt grid
   Typography: heading matches Level 2 spec
   Contrast: 7.1:1 on --color-surface
 
-WARNINGS   (2)
-  line 47:  padding: 12px — use 8px or 16px
-  line 89:  font-size: 15px — use 14px or 16px
+WARNINGS (2)
+  line 47: padding: 12px — use 8px or 16px
+  line 89: font-size: 15px — use 14px or 16px
 
 VIOLATIONS (2)
-  line 23:  #e5e5e5 on #f0f0f0 — contrast 1.3:1 (FAIL WCAG AA)
-  line 67:  margin-top: 37px — not on 8pt grid
+  line 23: #e5e5e5 on #f0f0f0 — contrast 1.3:1 (FAIL WCAG AA)
+  line 67: margin-top: 37px — not on 8pt grid
 
 AUTO-FIX? [y/n]
 ```
@@ -131,11 +139,17 @@ AUTO-FIX? [y/n]
 
 **Spacing** — Every margin, padding, and gap must land on the 8pt grid (8, 16, 24, 32...). No arbitrary pixel values.
 
+**Tokens-first** — All values (color, type, spacing, radius, shadow, motion) live in `design-tokens.json`. No hardcoded values in components.
+
+**Atomic hierarchy** — Atoms → Molecules → Organisms. No skipping levels. No hardcoding inside molecules or organisms.
+
 **Section isolation** — Every section is isolated using exactly one of: surface shift, whitespace, divider, border, or color fill. Never stack two same-surface sections without separation.
 
 **Visual hierarchy** — One primary action per view. Text flows through three levels: primary → muted → faint. Accent color used only for CTAs, active states, and links — never decoration.
 
 **Contrast** — WCAG AA mandatory everywhere. Body text 4.5:1 minimum. Large text 3:1 minimum.
+
+**Reasoning transparency** — Every design decision includes a stated rationale. HTML previews include `<!-- WHY -->` annotations explaining spacing, font, and color choices.
 
 **Anti-patterns blocked** — Gradient backgrounds, colored card borders, 3-column identical feature grids, center-aligned body text, arbitrary spacing, generic AI hero copy.
 
@@ -147,16 +161,17 @@ After `Design.md` is generated, the skill writes these automatically:
 
 ```
 your-project/
-├── Design.md                        ← your design system
-├── AGENTS.md                        ← Claude, Codex, OpenCode, Aider, Trae, Hermes
+├── design-tokens.json              ← canonical token source
+├── Design.md                       ← your design system
+├── AGENTS.md                       ← Claude, Codex, OpenCode, Aider, Trae, Hermes
 ├── .agent/
-│   ├── rules/design-system.md       ← Antigravity always-on
-│   └── workflows/design-system.md   ← Antigravity /design command
+│   ├── rules/design-system.md      ← Antigravity always-on
+│   └── workflows/design-system.md  ← Antigravity /design command
 └── .cursor/
-    └── rules/design-system.mdc      ← Cursor alwaysApply: true
+    └── rules/design-system.mdc     ← Cursor alwaysApply: true
 ```
 
-Commit `Design.md` and the hook files to git — every teammate's agent loads the design system automatically.
+Commit `Design.md`, `design-tokens.json`, and the hook files to git — every teammate's agent loads the design system automatically.
 
 ---
 
@@ -174,6 +189,7 @@ rm -f ~/.config/antigravity/rules/design-system.md
 
 # Remove per-project hooks (run inside each project)
 rm -f AGENTS.md
+rm -f design-tokens.json
 rm -f .agent/rules/design-system.md
 rm -f .agent/workflows/design-system.md
 rm -f .cursor/rules/design-system.mdc
@@ -185,11 +201,11 @@ rm -f .cursor/rules/design-system.mdc
 
 ```
 DesignSystem/
-├── skill.md      ← the skill (one file, symlinked to all agents)
-├── install.sh    ← installer
-├── README.md     ← this file
-├── CHANGELOG.md  ← version history
-└── .gitignore
+├── skill.md        ← the skill (v2.0 — symlinked to all agents)
+├── install.sh      ← installer
+├── preview/        ← example HTML previews
+├── README.md       ← this file
+└── CHANGELOG.md    ← version history
 ```
 
 ---
