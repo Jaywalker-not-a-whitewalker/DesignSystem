@@ -1,514 +1,372 @@
----
-name: design-system
-description: >
-  Expert UI/UX design system skill. Activates when user says 'create design system',
-  'new project', 'start UI', 'build [page/screen/component]', 'apply design system',
-  'audit my UI', 'extract design from [URL]', or begins any frontend/mobile/UI task.
-  On activation: run the 6-step onboarding flow. Never skip steps.
-  Always check if Design.md exists in the project root first.
-  If it does, load it silently and proceed directly to building.
-triggers:
-  - create design system
-  - new project
-  - start UI
-  - build UI
-  - design system
-  - apply design system
-  - audit my UI
-  - extract design from
-  - /design
-agents:
-  - claude
-  - codex
-  - antigravity
-  - opencode
-  - cursor
-  - gemini-cli
-  - copilot
-  - hermes
-  - aider
-  - trae
----
+# SKILL.md — Design System Generator
 
-# Design System Skill
-
-You are an expert UI/UX designer and front-end architect.
-Every UI decision must be intentional, systematic, and explained.
-You do not generate generic AI-looking interfaces.
-You follow strict design principles: spatial rhythm, visual hierarchy,
-section isolation, and contrast — always.
+## Skill Identity
+- **Name:** Design System Generator
+- **Version:** 2.0
+- **Purpose:** Guide a developer through structured onboarding to produce a production-ready design system — including design tokens, component hierarchy, and HTML preview — for any platform or form factor.
+- **Core Philosophy:**
+  - Tokens-first: `design-tokens.json` is the single source of truth
+  - Atomic composition: atoms → molecules → organisms, no duplication
+  - Reasoning transparency: every design decision is explained with alternatives shown
 
 ---
 
-## On Every Activation — Check First
+## Phase 0 — Onboarding Flow (Structured Intake)
 
-Before asking anything, check if Design.md exists in the current project root.
-
-    ls Design.md 2>/dev/null && echo EXISTS || echo MISSING
-
-- If EXISTS: Load it silently. Proceed to the task. Do not re-run onboarding.
-- If MISSING: Run the 6-Step Onboarding Flow below. Do not skip any step.
-
----
-
-## 6-Step Onboarding Flow
-
-Ask one step at a time. Wait for the answer before moving to the next.
-Never dump all questions at once.
+The skill MUST complete all 6 steps before generating any output. Ask steps sequentially. Never skip or combine steps unless the user has already provided the answer.
 
 ---
 
 ### Step 1 — Form Factor
 
-Ask:
-  What are we building?
-  [1] Website
-  [2] Mobile App
-  [3] Wearable App
-  [4] Desktop App
+> "What are you building?"
 
-Store as: FORM_FACTOR
+Options:
+- **Website**
+- **Mobile App**
+- **Wearable**
+- **Desktop App**
 
----
-
-### Step 2a — App Type (drives ALL design decisions)
-
-If Website:
-  [1] Landing Page / Marketing
-  [2] SaaS / Web App / Dashboard
-  [3] E-commerce
-  [4] Blog / Editorial / Portfolio
-  [5] Admin Panel / Internal Tool
-  [6] Other (describe)
-
-If Mobile App:
-  [1] Social / Community
-  [2] Productivity / Utility
-  [3] Commerce / Marketplace
-  [4] Health & Fitness
-  [5] Entertainment / Media
-  [6] Finance
-  [7] Other (describe)
-
-If Wearable:
-  [1] Health & Fitness Tracking
-  [2] Notification / Companion
-  [3] Standalone App
-
-If Desktop:
-  [1] Productivity Tool
-  [2] Developer Tool
-  [3] Creative / Media
-  [4] Dashboard / Analytics
-
-Store as: APP_TYPE
+→ Gate all downstream questions based on this answer.
 
 ---
 
-### Step 2b — Framework / Platform (affects code output only — optional)
+### Step 2a — App Type (drives design rules)
 
-If Website:
-  [1] React / Next.js
-  [2] Vue / Nuxt
-  [3] Svelte / SvelteKit
-  [4] Vanilla HTML/CSS/JS
-  [5] Other
-  [Enter] Skip
+Ask based on form factor selected:
 
-If Mobile:
-  [1] Flutter (cross-platform)
-  [2] SwiftUI (iOS native)
-  [3] Jetpack Compose (Android native)
-  [4] React Native
-  [5] Other
+**If Website:**
+> "What type of website is it?"
+- Landing Page
+- SaaS Dashboard
+- E-commerce
+- Blog / Content
+- Portfolio
+- Admin Panel / Internal Tool
+- Other (describe)
 
-If Wearable:
-  [1] watchOS (SwiftUI)
-  [2] Wear OS (Jetpack Compose)
-  [3] Other
+**If Mobile App:**
+> "What category is the app?"
+- Social / Community
+- Productivity / Tools
+- Commerce / Marketplace
+- Utility / Service
+- Health & Fitness
+- Entertainment / Media
+- Other (describe)
 
-Store as: FRAMEWORK
-Default if skipped: HTML/CSS for web, Flutter for mobile.
+**If Wearable:**
+> "What is the wearable's primary focus?"
+- Health Monitoring
+- Notifications / Companion
+- Standalone App
 
----
+**If Desktop:**
+> "What type of desktop app?"
+- Creative Tool
+- Developer Tool
+- Business / Enterprise
+- Utility
 
-### Step 3 — App Identity
-
-Ask all three in one message:
-  1. Name: What is it called?
-  2. Who is it for? (target user — be specific, e.g. 'indie devs', 'hospital staff')
-  3. Three words describing its personality and vibe
-     e.g. 'calm, minimal, trustworthy' or 'bold, playful, energetic'
-
-Store as: APP_NAME, TARGET_USER, VIBE_WORDS
-
-Internally derive:
-  Tone    -> formal / casual / playful / serious
-  Density -> spacious / balanced / dense  (from app type + target user)
-  Motion  -> minimal / moderate / expressive
+→ This answer drives: spacing density, navigation patterns, component vocabulary, and content hierarchy rules.
 
 ---
 
-### Step 4 — Visual Reference (High Value — Do Not Skip)
+### Step 2b — Framework / Platform *(optional, drives code output)*
 
-Ask:
-  Any visual references? (optional but highly recommended)
-  - Paste a URL  e.g. 'make it feel like Linear, Stripe, Notion'
-  - Describe a vibe  e.g. 'dark like a terminal' or 'warm like Bear notes'
-  - Skip — I will decide from your vibe words
+Ask based on form factor:
 
-If URL provided:
-  Fetch the page. Extract: color palette, typography, spacing rhythm,
-  component patterns, motion style. Derive — do not clone.
+**If Website:**
+> "Which framework are you using? (skip if unsure)"
+- React / Next.js
+- Vue / Nuxt
+- Svelte / SvelteKit
+- Vanilla HTML + CSS
+- Other
 
-If skipped: proceed with vibe-derived decisions in Step 6.
+**If Mobile:**
+> "What's your development stack?"
+- Flutter (cross-platform)
+- SwiftUI (iOS native)
+- Jetpack Compose (Android native)
+- React Native
+- Other
 
-Store as: VISUAL_REF
+**If Wearable:**
+- WatchOS (SwiftUI)
+- Wear OS (Jetpack Compose)
+- Other
 
----
-
-### Step 5 — Logo
-
-Ask:
-  Do you have a logo?
-  [1] Yes — paste the file path or URL
-  [2] No — generate one for me
-  [3] Text-only wordmark is fine
-
-If logo provided:
-  Extract dominant colors -> use as seed for color palette.
-  Note: style (geometric/organic), weight (heavy/light), personality.
-  These become hard constraints for the design system.
-
-If no logo:
-  Proceed to Step 6 for color direction.
-  After Design.md is created, generate a matching SVG logo.
-
-Store as: LOGO
+→ Framework affects: code output format only (Tailwind config vs. Flutter ThemeData vs. CSS variables). Design decisions remain framework-agnostic.
 
 ---
 
-### Step 6 — Color Direction
+### Step 3 — App Identity (Structured, not free-text)
 
-If logo provided:
-  Derive palette from logo. Ask:
-  'Any adjustments? e.g. darker, warmer, more muted — or press Enter.'
+> "Tell me about your app — answer these three:"
 
-If no logo:
-  [1] AI decides (from vibe words — recommended)
-  [2] Show me 3 palette options
-  [3] I have colors (paste hex or brand colors)
+1. **Who is it for?** *(target user — age, technical level, context of use)*
+   > e.g., "Working professionals aged 25–40, using it on the go"
 
-Color derivation rules when AI decides:
-  calm / minimal / trustworthy   -> cool neutrals, muted teal/slate/sage accent
-  bold / energetic / playful     -> warm surface, saturated amber/coral/violet accent
-  dark / technical / focused     -> dark surface, high-contrast electric blue/acid green
-  warm / approachable / human    -> beige/cream surface, terracotta or amber accent
-  luxury / premium / refined     -> near-black surface, gold or champagne accent
+2. **What's the one core action?** *(the primary job the user comes to do)*
+   > e.g., "Booking a matrimony consultation" or "Tracking daily shift attendance"
 
-Always generate:
-  - Primary background + 3 surface levels
-  - 1 accent color only (restraint = quality)
-  - Text: primary, muted, faint
-  - Error, warning, success (semantic — never decorative)
+3. **3 words describing the vibe / personality**
+   > e.g., "Warm, trustworthy, modern" or "Clean, fast, minimal"
 
-Store as: COLOR_DIRECTION
+→ These three answers drive: typography tone, color temperature, animation style, density, and accessibility requirements.
+
+Also ask:
+> "What is the app's name?"
 
 ---
 
-## After All 6 Steps — Generate Design.md
+### Step 4 — Visual References *(optional but high-value)*
 
-Write Design.md to the project root using this exact structure:
+> "Do you have any visual references? (any is fine)"
 
-========================================
-# Design System — [APP_NAME]
+Options:
+- **Logo file** — AI extracts primary/secondary colors and derives palette from it
+- **Reference URL** — AI analyzes the site's visual language
+- **"Feels like [App X]"** — AI maps known design language (e.g., "Like Linear" → sharp, dense, dark-mode-first)
+- **Screenshot** — AI reads layout, colors, and typographic rhythm
+- **None** — Skip to Step 5, AI generates from vibe words
 
-## Project
-Form Factor : [FORM_FACTOR]
-App Type    : [APP_TYPE]
-Framework   : [FRAMEWORK]
-Target User : [TARGET_USER]
-Vibe        : [VIBE_WORDS]
-Generated   : [DATE]
+→ This is the highest-leverage input. A reference URL or logo removes guesswork entirely.
 
-## Tone and Personality
-Tone          : [formal / casual / playful / serious — derived]
-Density       : [spacious / balanced / dense — derived]
-Motion        : [minimal / moderate / expressive — derived]
-Art Direction : [one sentence — the visual north star for this project]
+---
 
-## Color Tokens
+### Step 5 — Color Direction
 
-Light Mode:
-  --color-bg             : #xxxxxx
-  --color-surface        : #xxxxxx
-  --color-surface-2      : #xxxxxx
-  --color-surface-offset : #xxxxxx
-  --color-text           : #xxxxxx
-  --color-text-muted     : #xxxxxx
-  --color-text-faint     : #xxxxxx
-  --color-primary        : #xxxxxx
-  --color-primary-hover  : #xxxxxx
-  --color-error          : #xxxxxx
-  --color-warning        : #xxxxxx
-  --color-success        : #xxxxxx
-  --color-border         : oklch(from var(--color-text) l c h / 0.12)
-  --color-divider        : oklch(from var(--color-text) l c h / 0.07)
+Determined by Step 4 output:
 
-Dark Mode:
-  [Mirror of above, dark-adapted — always include both modes]
+| Input Available | Action |
+|---|---|
+| Logo provided | Extract dominant + accent colors → derive 5-shade palette per color |
+| Reference URL | Extract brand colors → propose adapted palette |
+| Vibe words only | AI generates 3 palette options (light/dark/vibrant) for user to choose |
+| User provides hex | Use directly → derive full token set from it |
+
+For every palette proposed:
+- Show 5 shades per color (50/100/300/500/700/900 naming)
+- Show primary, secondary, neutral, semantic (success/warning/error/info)
+- Explain the reasoning: why these colors match the vibe/audience
+
+---
+
+### Step 6 — Output Format
+
+> "What do you need generated?"
+
+- [ ] `design-tokens.json` (default — always included)
+- [ ] `Design.md` — full design system documentation
+- [ ] HTML Preview — interactive visual reference with developer options
+- [ ] `tailwind.config.js` — Tailwind CSS token mapping
+- [ ] Flutter `ThemeData` — Dart theme file
+- [ ] Component scaffold — list of atoms/molecules/organisms with specs
+
+Default if not answered: generate `design-tokens.json` + `Design.md` + HTML Preview.
+
+---
+
+## Phase 1 — Token Extraction & Generation
+
+Once onboarding is complete, generate `design-tokens.json` as the **first output**. Everything else derives from this file.
+
+### Token Categories (always include all):
+
+```json
+{
+  "color": {
+    "primary": { "50": "", "100": "", "300": "", "500": "", "700": "", "900": "" },
+    "secondary": {},
+    "neutral": {},
+    "semantic": {
+      "success": "", "warning": "", "error": "", "info": ""
+    },
+    "surface": { "background": "", "card": "", "overlay": "" }
+  },
+  "typography": {
+    "fontFamily": { "display": "", "body": "", "mono": "" },
+    "fontSize": { "xs": "", "sm": "", "base": "", "lg": "", "xl": "", "2xl": "", "3xl": "" },
+    "fontWeight": { "regular": 400, "medium": 500, "semibold": 600, "bold": 700 },
+    "lineHeight": { "tight": "", "normal": "", "relaxed": "" }
+  },
+  "spacing": {
+    "base": "8px",
+    "scale": { "1": "4px", "2": "8px", "3": "12px", "4": "16px", "6": "24px", "8": "32px", "10": "40px", "12": "48px", "16": "64px" }
+  },
+  "borderRadius": {
+    "none": "0", "sm": "4px", "md": "8px", "lg": "12px", "xl": "16px", "full": "9999px"
+  },
+  "shadow": {
+    "sm": "", "md": "", "lg": "", "xl": ""
+  },
+  "motion": {
+    "duration": { "fast": "100ms", "normal": "200ms", "slow": "400ms" },
+    "easing": { "ease-in": "", "ease-out": "", "spring": "" }
+  },
+  "breakpoint": {
+    "sm": "640px", "md": "768px", "lg": "1024px", "xl": "1280px"
+  }
+}
+```
+
+**Reasoning rule:** For every token value set, include a brief inline comment explaining the design rationale.
+
+---
+
+## Phase 2 — Atomic Component Hierarchy
+
+After tokens are defined, map out the component system using atomic design:
+
+### Atoms (single-purpose, no children)
+- Button (primary / secondary / ghost / destructive)
+- Input (text / password / search)
+- Label
+- Icon
+- Badge
+- Avatar
+- Divider
+- Spinner / Loader
+- Tag / Chip
+
+### Molecules (2–4 atoms combined)
+- Input Group (label + input + helper text)
+- Card Header (avatar + name + timestamp)
+- Nav Item (icon + label + badge)
+- Form Field (label + input + error)
+- Alert (icon + message + dismiss)
+- Stat Block (label + value + trend)
+
+### Organisms (sections with business logic)
+- Navigation Bar
+- Hero Section
+- Feature Grid
+- Pricing Table
+- Form (multi-field)
+- Data Table
+- Modal / Bottom Sheet
+- Dashboard Panel
+
+### Rules:
+- Organisms may only contain molecules and atoms, never other organisms
+- Molecules may only contain atoms
+- Each component must reference token values only — no hardcoded values allowed
+
+---
+
+## Phase 3 — Design.md Generation
+
+Structure of the generated `Design.md`:
+
+```
+# [App Name] Design System
+
+## Overview
+- Form factor, app type, target user, core action, personality
+
+## Design Tokens
+- Link to design-tokens.json
+- Visual token reference table
+
+## Color System
+- Palette swatches with hex values
+- Usage rules (when to use primary vs secondary vs neutral)
+- Dark mode variants (if applicable)
 
 ## Typography
-  --font-display : '[Display Font]', [fallback], serif/sans-serif
-  --font-body    : '[Body Font]', [fallback], sans-serif
-  CDN            : [Fontshare or Google Fonts link]
+- Font choices + rationale
+- Type scale with usage context
+- Heading hierarchy rules
 
-  Display territory : --text-xl (24px) and above ONLY
-  Body territory    : --text-xs through --text-base
+## Spacing System
+- 8pt grid explanation
+- Spacing scale reference
+- When to use which spacing value
 
-Type Scale (fluid clamp):
-  --text-xs   : clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem)   12-14px
-  --text-sm   : clamp(0.875rem, 0.8rem  + 0.35vw, 1rem)       14-16px
-  --text-base : clamp(1rem,     0.95rem + 0.25vw, 1.125rem)   16-18px
-  --text-lg   : clamp(1.125rem, 1rem    + 0.75vw, 1.5rem)     18-24px
-  --text-xl   : clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem)    24-36px
-  --text-2xl  : clamp(2rem,     1.2rem  + 2.5vw,  3.5rem)     32-56px
+## Component Library
+- Atoms: specs, states, token references
+- Molecules: composition rules
+- Organisms: layout and behavior
 
-## Spacing (4px base — 8pt rhythm)
-  --space-1  : 0.25rem    4px
-  --space-2  : 0.5rem     8px
-  --space-3  : 0.75rem   12px
-  --space-4  : 1rem      16px
-  --space-6  : 1.5rem    24px
-  --space-8  : 2rem      32px
-  --space-12 : 3rem      48px
-  --space-16 : 4rem      64px
-  --space-20 : 5rem      80px
-  --space-24 : 6rem      96px
+## Navigation Patterns
+- Based on form factor + app type
+- e.g., Bottom nav for mobile social vs. sidebar for SaaS dashboard
 
-  RULE: Every margin, padding, gap must use a spacing token. No arbitrary values.
+## Accessibility Notes
+- Color contrast ratios (WCAG AA minimum)
+- Touch target sizes (mobile: 44x44pt minimum)
+- Focus states
 
-## Isolation Rules (Section Separation)
-Choose ONE per section — in priority order:
-  1. Surface shift    -> different --color-surface level (preferred)
-  2. Whitespace       -> padding-block min --space-16 between major sections
-  3. Divider          -> 1px --color-divider line
-  4. Border           -> 1px container border at oklch(... / 0.10)
-  5. Color fill       -> --color-surface-offset as section background
-
-  NEVER: colored side borders on cards.
-  NEVER: two same-surface sections with no separation.
-
-## Visual Hierarchy Rules
-  1. ONE primary action per view
-  2. Heading levels visually distinct — each clearly differs from the one below
-  3. Text: --color-text -> --color-text-muted -> --color-text-faint (no skipping)
-  4. Accent: CTAs, active states, links ONLY — never decoration
-  5. Weight contrast preferred over size jumps
-
-## Contrast (WCAG AA — mandatory)
-  Body text 16px   : 4.5:1 minimum on every surface
-  Large text 24px+ : 3:1 minimum
-  Muted text       : still 4.5:1 at body size
-  Colored bg btns  : verify specifically
-
-## Border and Radius
-  --radius-sm   : 0.375rem
-  --radius-md   : 0.5rem
-  --radius-lg   : 0.75rem
-  --radius-xl   : 1rem
-  --radius-full : 9999px
-  Nested rule   : inner-radius = outer-radius - gap
-
-## Shadows
-  --shadow-sm : 0 1px 2px oklch(0.2 0.01 80 / 0.06)
-  --shadow-md : 0 4px 12px oklch(0.2 0.01 80 / 0.08)
-  --shadow-lg : 0 12px 32px oklch(0.2 0.01 80 / 0.12)
-
-## Component Vocabulary
-[Generated per APP_TYPE]
-  Website / Landing    : hero, feature grid, testimonial, pricing card, CTA banner, nav, footer
-  SaaS / Dashboard     : sidebar, topbar, KPI card, data table, chart, modal, toast, empty state
-  Mobile / Productivity: bottom nav, list cell, action sheet, FAB, skeleton, pull-to-refresh
-  Mobile / Social      : feed card, avatar, stories row, reaction bar, comment thread
-  E-commerce           : product card, cart drawer, filter panel, checkout stepper, badge
-  Admin / Internal     : data table, bulk actions, filter bar, status badge, pagination
-
-## Logo
-  Path/URL         : [LOGO path or SVG to be generated]
-  Style            : [geometric / wordmark / icon+text]
-  Colors extracted : [hex values if logo provided]
-
-## Visual Reference
-  Source  : [URL, description, or AI-derived from vibe words]
-  Derived : [what was extracted or inferred]
-
-## Pages and Screens Inventory
-[Fill as pages are built]
-  [ ] [Page name] — planned / in progress / done
-
-## Audit Log
-[Violations found during code review — appended automatically]
-========================================
+## Platform-Specific Rules
+- (Generated based on Step 2b framework choice)
+```
 
 ---
 
-## Core Design Rules (Applied to Every Build)
+## Phase 4 — HTML Preview Generation
 
-### 8/16 Spacing Enforcement
-Every value must land on the 8pt grid: 8, 16, 24, 32, 40, 48, 64...
-Exception: tight internal padding (icon gap, badge padding) may use 4px.
-Section padding-block minimum: 48px. Component padding minimum: 16px.
+Generate a self-contained `preview.html` with:
 
-Audit output format:
-  PASS  line 102: gap: 16px
-  WARN  line 47:  padding: 12px — use 8px or 16px
-  FAIL  line 67:  margin-top: 37px — arbitrary, not on 8pt grid
-  FAIL  line 23:  #e5e5e5 on #f0f0f0 — contrast 1.3:1 (WCAG AA fail)
+1. **Token Panel** — live color swatches, type scale, spacing scale
+2. **Component Showcase** — every atom and molecule rendered with real token values
+3. **Page Template Preview** — one sample layout based on app type
+4. **Developer Options Panel** — toggle dark/light mode, change primary color, preview on mobile/desktop viewport
 
-### Section Isolation Declaration
-When building any section, always declare:
-  ISOLATION: [surface-shift | whitespace | divider | border | color-fill]
-  REASON: [why this method fits here]
-
-### Anti-Patterns — Never Generate
-  - Purple or blue gradient backgrounds and gradient buttons
-  - Icons in colored circles used as feature decorators
-  - 3-column identical feature grid (the classic AI layout tell)
-  - Colored left or side borders on cards
-  - Arbitrary px values not on the spacing grid
-  - text-align center on all body content
-  - Generic hero copy (Empower your journey, All-in-one solution)
-  - Pure black shadows on warm or light surfaces
+### Reasoning Transparency in HTML:
+Every section must include an expandable `<!-- WHY -->` comment or on-page tooltip explaining:
+- Why this spacing value was chosen
+- Why this font pairing was selected
+- Why this color contrast meets accessibility standards
 
 ---
 
-## HTML Preview Format
+## Phase 5 — Audit & Update
 
-Every component or page preview must include:
-  1. Rendered component with real design tokens applied inline
-  2. Decision annotations explaining WHY each choice was made
-  3. Developer option toggles — isolation strategy, spacing, color variants
-  4. Mini audit panel showing: spacing check, contrast ratio, hierarchy levels
+When the user provides updates (new brand color, changed app name, new component), the skill must:
 
-Annotation format inside HTML comment:
-  DECISION: [what was chosen]
-  WHY: [reason tied to the design system rules]
-  ALTERNATIVE: [what the developer can swap and how]
+1. Update `design-tokens.json` first
+2. Cascade changes to `Design.md`
+3. Regenerate affected HTML preview sections
+4. Report what changed and why in a diff summary
 
 ---
 
-## Build Flow (After Design.md Exists)
+## Skill Behavior Rules
 
-For each page or screen:
-  1. Load Design.md — read ALL tokens, rules, component vocabulary
-  2. Identify page type — map isolation strategy per section
-  3. Build with tokens only — zero hardcoded values
-  4. Run spacing audit — flag every violation
-  5. Run contrast check — fix all failures
-  6. Output HTML preview with annotations and developer toggles
-  7. Update Design.md pages inventory
-
-For each component:
-  1. Classify: atom / molecule / organism
-  2. Define all states: default, hover, focus, active, disabled, error, loading, empty
-  3. Compose from atoms up — never duplicate, always reuse
-  4. Annotate every non-obvious decision
+1. **Never hardcode values** — always derive from tokens
+2. **Always explain reasoning** — every design choice must have a stated rationale
+3. **Ask, don't assume** — if a step's answer is ambiguous, ask a clarifying question before proceeding
+4. **Fail gracefully** — if logo/URL cannot be parsed, fall back to vibe-word palette generation
+5. **Token-first always** — if a user requests a component before tokens are defined, pause and complete token generation first
+6. **Show options** — for subjective decisions (color palette, typography), always show 2–3 options with trade-offs explained
 
 ---
 
-## Audit Mode
+## Example Session
 
-Trigger: user says 'audit [file]' or 'check my UI'
+```
+User: I want to build a matrimony app for the Indian community.
 
-Output:
-  DESIGN AUDIT — [filename]
-  ----------------------------------------
-  PASSES     ([n])
-  WARNINGS   ([n])
-  VIOLATIONS ([n])
+Skill:
+Step 1 → Form Factor: Mobile App
+Step 2a → App Type: Social / Community
+Step 2b → Stack: Flutter (cross-platform)
+Step 3 →
+  - Who is it for? Indian families + individuals aged 22-40, browsing on mobile
+  - Core action: Browse and connect with compatible matches
+  - Vibe: Warm, trustworthy, celebratory
+Step 4 → No logo yet — reference: "feels like Shaadi.com but more modern and minimal"
+Step 5 → AI generating 3 palette options based on vibe...
+Step 6 → Output: design-tokens.json + Design.md + Flutter ThemeData + HTML Preview
 
-  AUTO-FIX? [y/n]
-
-If yes: output corrected code with inline diff markers.
-
----
-
-## Per-Project Agent Hooks — Write on First Run
-
-After generating Design.md, write these files into the project root.
-They make ALL agents automatically load the design system on every future session.
-
-### 1. AGENTS.md
-Targets: Claude, Codex, OpenCode, Aider, Trae, Hermes, OpenClaw, Factory Droid
-
-Append to AGENTS.md (create if missing):
-
-  ## design-system
-  Before writing any UI, frontend code, or components — check if Design.md exists.
-  If it exists: load it and follow ALL tokens, spacing, isolation, and component rules.
-  If it does not exist: run the design system onboarding flow before writing any code.
-  Never hardcode colors, spacing, or font sizes — always use tokens from Design.md.
-
-### 2. .agent/rules/design-system.md
-Targets: Google Antigravity (always-on rules)
-
-Create .agent/rules/ if missing. Write:
-
-  # design-system rules
-  Before writing any UI, frontend code, or components — check if Design.md exists.
-  If it exists: load it and follow ALL tokens, spacing, isolation, and component rules.
-  If it does not exist: run the design system onboarding flow before writing any code.
-  Never hardcode colors, spacing, or font sizes — always use tokens from Design.md.
-
-### 3. .agent/workflows/design-system.md
-Targets: Google Antigravity (slash command registration)
-
-Create .agent/workflows/ if missing. Write:
-
-  # /design workflow
-  Trigger: /design
-  Action: Run the design system onboarding flow, or load existing Design.md and proceed.
-
-### 4. .cursor/rules/design-system.mdc
-Targets: Cursor (alwaysApply)
-
-Create .cursor/rules/ if missing. Write:
-
-  ---
-  alwaysApply: true
-  ---
-  Before writing any UI, frontend code, or components — check if Design.md exists.
-  If it exists: load it and follow ALL tokens, spacing, isolation, and component rules.
-  If it does not exist: run the design system onboarding flow before writing any code.
-  Never hardcode colors, spacing, or font sizes — always use tokens from Design.md.
-
-Agent coverage summary after first project run:
-  AGENTS.md                     -> Claude, Codex, OpenCode, Aider, Trae, Hermes, OpenClaw, Droid
-  .agent/rules/design-system.md -> Google Antigravity (always-on)
-  .agent/workflows/             -> Google Antigravity (/design slash command)
-  .cursor/rules/                -> Cursor (alwaysApply: true)
+→ Generating design-tokens.json...
+→ Primary color rationale: Deep rose-gold (#C0717A) — warm, celebratory, culturally
+   resonant for Indian wedding context.
+→ Neutral: warm off-white (#FAF6F1) — avoids clinical white, feels premium.
+```
 
 ---
 
-## Install Complete Signal
-
-After Design.md and all agent hook files are written, print:
-
-  Design system initialized
-
-  App         : [APP_NAME]
-  Form factor : [FORM_FACTOR] — [APP_TYPE]
-  Framework   : [FRAMEWORK]
-  Palette     : [primary color] + [surface description]
-  Fonts       : [Display Font] / [Body Font]
-  Target      : [TARGET_USER]
-
-  Files written:
-    Design.md                      — your design system
-    AGENTS.md                      — Claude, Codex, OpenCode, Aider, Trae, Hermes
-    .agent/rules/design-system.md  — Antigravity always-on
-    .agent/workflows/              — Antigravity /design command
-    .cursor/rules/design-system.mdc — Cursor alwaysApply
-
-  Next: 'build the [page name]' or 'show me the component library'
+*Skill version 2.0 — rebuilt with tokens-first architecture, atomic composition hierarchy, and reasoning transparency.*
