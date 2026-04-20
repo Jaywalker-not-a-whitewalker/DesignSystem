@@ -24,7 +24,7 @@ On first use in a project, the skill runs a 6-step onboarding flow:
 1. **Form factor** — Website / Mobile App / Wearable / Desktop
 2. **App type** — Landing page, SaaS, e-commerce, social, productivity, etc. (drives all design decisions)
 3. **Framework** — React/Next.js, Flutter, SwiftUI, Vanilla HTML, etc. (affects code output only)
-4. **App identity** — Name, target user, and three vibe words (calm + minimal + focused)
+4. **App identity** — Name, target user, and three vibe words (e.g. calm, minimal, focused)
 5. **Visual reference** — URL, screenshot, or describe a vibe (optional but high value)
 6. **Color direction** — Extracted from logo, chosen from AI-generated options, or provided manually
 
@@ -46,14 +46,14 @@ Every future session in that project — regardless of which agent you use — a
 ### Option A — curl (recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/design-system/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Jaywalker-not-a-whitewalker/DesignSystem/main/install.sh | bash
 ```
 
 ### Option B — clone
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/design-system.git
-cd design-system
+git clone https://github.com/Jaywalker-not-a-whitewalker/DesignSystem.git
+cd DesignSystem
 chmod +x install.sh
 ./install.sh
 ```
@@ -173,7 +173,8 @@ rm -f ~/.hermes/skills/design-system/skill.md
 rm -f ~/.config/antigravity/rules/design-system.md
 
 # Remove per-project hooks (run inside each project)
-rm -f AGENTS.md .agent/rules/design-system.md
+rm -f AGENTS.md
+rm -f .agent/rules/design-system.md
 rm -f .agent/workflows/design-system.md
 rm -f .cursor/rules/design-system.mdc
 ```
@@ -183,10 +184,12 @@ rm -f .cursor/rules/design-system.mdc
 ## Repo structure
 
 ```
-design-system/
+DesignSystem/
 ├── skill.md      ← the skill (one file, symlinked to all agents)
 ├── install.sh    ← installer
-└── README.md     ← this file
+├── README.md     ← this file
+├── CHANGELOG.md  ← version history
+└── .gitignore
 ```
 
 ---
