@@ -82,16 +82,7 @@ else
   FAILED+=("Antigravity (skill)")
 fi
 
-# 5b. Global workflow (~/.gemini/antigravity/global_workflows/design-system.md)
-AG_WORKFLOW_DIR="$HOME/.gemini/antigravity/global_workflows"
-mkdir -p "$AG_WORKFLOW_DIR"
-if curl -fsSL "$RAW/skill.md" -o "$AG_WORKFLOW_DIR/design-system.md" 2>/dev/null; then
-  echo " ✓ Antigravity workflow -> $AG_WORKFLOW_DIR/design-system.md"
-  INSTALLED+=("Antigravity (workflow) $AG_WORKFLOW_DIR/design-system.md")
-else
-  echo " x Antigravity workflow (failed)"
-  FAILED+=("Antigravity (workflow)")
-fi
+
 
 # 5c. Append to global rule file (~/.gemini/GEMINI.md)
 GEMINI_RULE="$HOME/.gemini/GEMINI.md"
