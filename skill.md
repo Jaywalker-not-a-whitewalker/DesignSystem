@@ -342,33 +342,50 @@ const DESIGN_TOKENS = {
   },
   color: {
     light: {
-      bg: "#...",
-      surface: "#...",
-      text: "#...",
-      primary: "#...",
-      // ... all light mode colors
-    },
+bg: "#...",
+        surface: "#...",
+        surface2: "#...",
+        surfaceOffset: "#...",
+        text: "#...",
+        textMuted: "#...",
+        textFaint: "#...",
+        primary: "#...",
+        primaryHover: "#...",
+        error: "#...",
+        warning: "#...",
+        success: "#..."
     dark: {
-      bg: "#...",
-      surface: "#...",
-      // ... all dark mode colors  
-    }
+bg: "#...",
+        surface: "#...",
+        surface2: "#...",
+        surfaceOffset: "#...",
+        text: "#...",
+        textMuted: "#...",
+        textFaint: "#...",
+        primary: "#...",
+        primaryHover: "#...",
+        error: "#...",
+        warning: "#...",
+        success: "#..."
+      }
   },
   typography: {
-    fontFamily: { display: "...", body: "...", mono: "..." },
-    fontSize: { xs: "...", sm: "...", base: "...", lg: "...", xl: "...", "2xl": "...", "3xl": "..." },
-    fontWeight: { regular: 400, medium: 500, semibold: 600, bold: 700 },
-    lineHeight: { tight: "...", normal: "...", relaxed: "..." }
-  },
-  spacing: {
-    base: "8px",
-    scale: { "1": "4px", "2": "8px", "3": "12px", "4": "16px", "6": "24px", "8": "32px", "10": "40px", "12": "48px", "16": "64px" }
-  },
-  borderRadius: {
-    none: "0", sm: "4px", md: "8px", lg: "12px", xl: "16px", full: "9999px"
-  },
-  shadow: {
-    sm: "...", md: "...", lg: "...", xl: "..."
+    fontDisplay: "...",
+      fontBody: "...",
+      fontCDN: "...",
+      scale: { xs: "...", sm: "...", base: "...", lg: "...", xl: "...", "2xl": "..." }
+    },
+    spacing: {
+      s1: "0.25rem", s2: "0.5rem", s3: "0.75rem", s4: "1rem",
+      s6: "1.5rem", s8: "2rem", s12: "3rem", s16: "4rem",
+      s20: "5rem", s24: "6rem"
+    },
+    radius: {
+      sm: "0.375rem", md: "0.5rem", lg: "0.75rem", xl: "1rem"
+    },
+    shadow: {
+      sm: "...", md: "...", lg: "..."
+    }
   }
 };
 ```
