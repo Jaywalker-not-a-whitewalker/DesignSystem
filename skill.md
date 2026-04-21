@@ -22,6 +22,8 @@ date_added: "2026-04-20"
 
 The skill MUST complete all 6 steps before generating any output. Ask steps sequentially. Never skip or combine steps unless the user has already provided the answer.
 
+**CRITICAL: The Example Session at the bottom is for illustration only. NEVER use those example values (Flutter, matrimony app, etc.) as defaults. ALWAYS collect real answers from the current user through Phase 0 before generating anything.**
+
 ---
 
 ### Step 1 — Form Factor
