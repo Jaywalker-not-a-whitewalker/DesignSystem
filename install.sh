@@ -92,7 +92,7 @@ RULE_MARKER="# design-system skill"
 if ! grep -q "$RULE_MARKER" "$GEMINI_RULE" 2>/dev/null; then
   echo "" >> "$GEMINI_RULE"
   echo "$RULE_MARKER" >> "$GEMINI_RULE"
-  echo "Before writing any UI code, check if Design.md exists in the project root. If it does, load it silently and follow all rules inside it. If it does not exist, run the design-system skill onboarding flow (6 steps: form factor, app type, framework, app identity, visual reference, color direction) before writing any code." >> "$GEMINI_RULE"
+  echo "Before writing any UI code, check if designSystem-Out/Design.md exists in the project root. If it does, load it silently and follow all rules inside it. If it does not exist, run the design-system skill onboarding flow (6 steps: form factor, app type, framework, app identity, visual reference, color direction) before writing any code." >> "$GEMINI_RULE"
   echo " ✓ Antigravity global rule appended -> $GEMINI_RULE"
 else
   echo " ✓ Antigravity global rule already present in $GEMINI_RULE"

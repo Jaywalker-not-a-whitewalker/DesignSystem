@@ -180,7 +180,7 @@ Default if not answered: generate `design-tokens.json` + `Design.md` + HTML Prev
 
 ## Phase 1 — Token Extraction & Generation
 
-Once onboarding is complete, generate `design-tokens.json` as the **first output**. Everything else derives from this file.
+Once onboarding is complete, generate `designSystem-Out/design-tokens.json` as the **first output** (create the folder if it doesn't exist). Everything else derives from this file.
 
 ### Token Categories (always include all):
 
@@ -403,7 +403,7 @@ Replace the placeholders in the template:
 
 ### Step 4: Write the preview file
 
-Write the modified HTML to `preview.html` in the **project root directory** (not in ~/.design-system/).
+Write the modified HTML to `designSystem-Out/preview.html` relative to the **project root directory** (create the `designSystem-Out` folder if it doesn't exist). Do not write to `~/.design-system/`.
 
 **IMPORTANT HTML GENERATION RULES:**
 1. You may completely rewrite the content inside `<div class="device-screen">` to match the user's specific app domain (e.g., adding mock graphs, tables, or specialized UI that fits their vibe).

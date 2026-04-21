@@ -59,7 +59,9 @@ const server = http.createServer((req, res) => {
           res.end(JSON.stringify({ error: 'File not in allowlist' }));
           return;
         }
-        const dest = path.join(PROJECT_ROOT, filename);
+        const outDir = path.join(PROJECT_ROOT, 'designSystem-Out');
+        if (!fs.existsSync(outDir)) { fs.mkdirSync(outDir, { recursive: true }); }
+        const dest = path.join(outDir, filename);
         fs.writeFileSync(dest, content, 'utf8');
         console.log('  wrote  ' + dest);
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -84,7 +86,7 @@ const server = http.createServer((req, res) => {
   let isPreviewHtml = false;
 
   if (parsed.pathname === '/' || parsed.pathname === '/preview.html' || parsed.pathname === '/index.html') {
-    const rootPreview = path.join(PROJECT_ROOT, 'preview.html');
+    const rootPreview = path.join(PROJECT_ROOT, 'designSystem-Out', 'preview.html');
     if (fs.existsSync(rootPreview)) {
       filePath = rootPreview;
       isPreviewHtml = true;
@@ -92,7 +94,7 @@ const server = http.createServer((req, res) => {
       filePath = path.join(PREVIEW_DIR, 'index.html');
     }
   } else if (parsed.pathname === '/design-tokens.json') {
-    const rootTokens = path.join(PROJECT_ROOT, 'design-tokens.json');
+    const rootTokens = path.join(PROJECT_ROOT, 'designSystem-Out', 'design-tokens.json');
     if (fs.existsSync(rootTokens)) {
       filePath = rootTokens;
     } else {
