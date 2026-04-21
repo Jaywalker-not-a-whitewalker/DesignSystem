@@ -321,12 +321,19 @@ async function init() {
       const res = await fetch('/design-tokens.json');
       if (res.ok) {
         const diskState = await res.json();
-        if (diskState.meta) state.meta = diskState.meta;
-        if (diskState.color) state.color = diskState.color;
-        if (diskState.typography) state.typography = diskState.typography;
-        if (diskState.spacing) state.spacing = diskState.spacing;
-        if (diskState.radius) state.radius = diskState.radius;
-        if (diskState.shadow) state.shadow = diskState.shadow;
+        
+        // Safeguard: Verify diskState has the correct 'simple' schema (light/dark)
+        // If the AI generated the legacy multi-shade nested schema, this prevents a crash.
+        if (diskState.color && diskState.color.light && diskState.color.dark) {
+          if (diskState.meta) state.meta = diskState.meta;
+          if (diskState.color) state.color = diskState.color;
+          if (diskState.typography) state.typography = diskState.typography;
+          if (diskState.spacing) state.spacing = diskState.spacing;
+          if (diskState.radius) state.radius = diskState.radius;
+          if (diskState.shadow) state.shadow = diskState.shadow;
+        } else {
+          console.warn("Warning: design-tokens.json uses an incompatible legacy schema. Falling back to embedded HTML tokens. Click 'Sync to disk' in the UI to upgrade your JSON schema to the correct format.");
+        }
       }
     } catch (e) {
       console.warn('Could not load tokens from disk', e);
