@@ -1,6 +1,20 @@
 # Changelog
 
+## v2.0.1 — 2026-04-21
+
+### Fixed
+- `DESIGN_TOKENS` schema in `skill.md` now matches `app.js` expected keys exactly:
+  - `typography`: changed from `fontFamily/fontSize/fontWeight/lineHeight` to `fontDisplay/fontBody/fontCDN/scale`
+  - `color.light/dark`: expanded from 4 keys to full 12 keys (`surface2`, `surfaceOffset`, `textMuted`, `textFaint`, `primaryHover`, `error`, `warning`, `success`)
+  - `spacing`: changed from `base+scale[]` to `s1/s2/s3/s4/s6/s8/s12/s16/s20/s24` flat keys
+  - `radius`: renamed from `borderRadius` to `radius` with rem values matching app.js
+- Added CRITICAL warning to Phase 0 to prevent agent from using Example Session values instead of running real onboarding
+- Root cause of `Design.md` always showing Flutter/Mobile defaults: agent was using example session values without completing Phase 0
+- Root cause of `preview.html` always showing default content: `DESIGN_TOKENS` schema mismatch caused injection to produce wrong keys → `app.js` fell back to `DEFAULT_STATE`
+
 ## v2.0.0 — 2026-04-20
+
+
 
 ### Changed
 - Rebuilt `skill.md` from scratch as v2.0 — complete structural overhaul
