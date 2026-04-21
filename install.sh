@@ -1,6 +1,7 @@
 #!/bin/bash
 # ============================================================
 # design-system skill — installer
+# v2.0.1 — 2026-04-21 — Fixed DESIGN_TOKENS schema alignment (typography/spacing/radius keys)
 # Downloads skill.md + full preview/ from GitHub.
 # Works correctly with: curl -fsSL https://raw.githubusercontent.com/Jaywalker-not-a-whitewalker/DesignSystem/main/install.sh | bash
 # ============================================================
