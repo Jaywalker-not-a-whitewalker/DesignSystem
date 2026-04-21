@@ -40,75 +40,134 @@
     <div class="panel-section">
       <div class="panel-heading">Colors — Light Mode</div>
       <div class="color-row"><label>Background</label>
-        <input type="color" data-token="light.bg" value="#F8F9FA" />
+        <input type="color" data-token="color.light.bg" value="#F8F9FA" />
         <span class="color-hex">#F8F9FA</span></div>
       <div class="color-row"><label>Surface</label>
-        <input type="color" data-token="light.surface" value="#FFFFFF" />
+        <input type="color" data-token="color.light.surface" value="#FFFFFF" />
         <span class="color-hex">#FFFFFF</span></div>
       <div class="color-row"><label>Surface 2</label>
-        <input type="color" data-token="light.surface2" value="#F1F3F5" />
+        <input type="color" data-token="color.light.surface2" value="#F1F3F5" />
         <span class="color-hex">#F1F3F5</span></div>
       <div class="color-row"><label>Surface Offset</label>
-        <input type="color" data-token="light.surfaceOffset" value="#E9ECEF" />
+        <input type="color" data-token="color.light.surfaceOffset" value="#E9ECEF" />
         <span class="color-hex">#E9ECEF</span></div>
       <div class="color-row"><label>Text</label>
-        <input type="color" data-token="light.text" value="#212529" />
+        <input type="color" data-token="color.light.text" value="#212529" />
         <span class="color-hex">#212529</span></div>
       <div class="color-row"><label>Text Muted</label>
-        <input type="color" data-token="light.textMuted" value="#6C757D" />
+        <input type="color" data-token="color.light.textMuted" value="#6C757D" />
         <span class="color-hex">#6C757D</span></div>
       <div class="color-row"><label>Text Faint</label>
-        <input type="color" data-token="light.textFaint" value="#ADB5BD" />
+        <input type="color" data-token="color.light.textFaint" value="#ADB5BD" />
         <span class="color-hex">#ADB5BD</span></div>
       <div class="color-row"><label>Primary</label>
-        <input type="color" data-token="light.primary" value="#2F80ED" />
+        <input type="color" data-token="color.light.primary" value="#2F80ED" />
         <span class="color-hex">#2F80ED</span></div>
       <div class="color-row"><label>Primary Hover</label>
-        <input type="color" data-token="light.primaryHover" value="#1A6FD6" />
+        <input type="color" data-token="color.light.primaryHover" value="#1A6FD6" />
         <span class="color-hex">#1A6FD6</span></div>
       <div class="color-row"><label>Error</label>
-        <input type="color" data-token="light.error" value="#E03131" />
+        <input type="color" data-token="color.light.error" value="#E03131" />
         <span class="color-hex">#E03131</span></div>
       <div class="color-row"><label>Warning</label>
-        <input type="color" data-token="light.warning" value="#F08C00" />
+        <input type="color" data-token="color.light.warning" value="#F08C00" />
         <span class="color-hex">#F08C00</span></div>
       <div class="color-row"><label>Success</label>
-        <input type="color" data-token="light.success" value="#2F9E44" />
+        <input type="color" data-token="color.light.success" value="#2F9E44" />
         <span class="color-hex">#2F9E44</span></div>
     </div>
 
     <div class="panel-section">
       <div class="panel-heading">Colors — Dark Mode</div>
       <div class="color-row"><label>Background</label>
-        <input type="color" data-token="dark.bg" value="#0D1117" />
+        <input type="color" data-token="color.dark.bg" value="#0D1117" />
         <span class="color-hex">#0D1117</span></div>
       <div class="color-row"><label>Surface</label>
-        <input type="color" data-token="dark.surface" value="#161B22" />
+        <input type="color" data-token="color.dark.surface" value="#161B22" />
         <span class="color-hex">#161B22</span></div>
       <div class="color-row"><label>Surface 2</label>
-        <input type="color" data-token="dark.surface2" value="#1C2128" />
+        <input type="color" data-token="color.dark.surface2" value="#1C2128" />
         <span class="color-hex">#1C2128</span></div>
       <div class="color-row"><label>Text</label>
-        <input type="color" data-token="dark.text" value="#E6EDF3" />
+        <input type="color" data-token="color.dark.text" value="#E6EDF3" />
         <span class="color-hex">#E6EDF3</span></div>
       <div class="color-row"><label>Text Muted</label>
-        <input type="color" data-token="dark.textMuted" value="#8B949E" />
+        <input type="color" data-token="color.dark.textMuted" value="#8B949E" />
         <span class="color-hex">#8B949E</span></div>
       <div class="color-row"><label>Primary</label>
-        <input type="color" data-token="dark.primary" value="#4493F8" />
+        <input type="color" data-token="color.dark.primary" value="#4493F8" />
         <span class="color-hex">#4493F8</span></div>
       <div class="color-row"><label>Error</label>
-        <input type="color" data-token="dark.error" value="#F85149" />
+        <input type="color" data-token="color.dark.error" value="#F85149" />
         <span class="color-hex">#F85149</span></div>
       <div class="color-row"><label>Success</label>
-        <input type="color" data-token="dark.success" value="#3FB950" />
+        <input type="color" data-token="color.dark.success" value="#3FB950" />
         <span class="color-hex">#3FB950</span></div>
     </div>
 
+  
   </aside>
 
   <!-- ── CENTER: Device Preview ───────────────────────────── -->
   <main class="stage">
+
+    <!-- ── HUD Console (Center top) ─────────────────────────── -->
+    <div id="hud-console" style="display:flex; gap:32px; padding:24px 32px; border-radius:16px; background:var(--color-surface); box-shadow:var(--shadow-md); border:1px solid var(--color-border); margin-bottom:32px; width:100%; max-width:800px; justify-content:space-between; align-items:flex-start">
+       
+       <!-- Typography Container -->
+       <div style="flex:1">
+          <div class="panel-heading" style="margin-bottom:20px; padding:0; border:none">Typography Engine</div>
+          <div style="display:flex; gap:16px">
+            <!-- Display Font -->
+            <div style="flex:1">
+              <label style="font-size:10px; color:var(--color-text-faint); display:block; margin-bottom:6px; font-weight:600; text-transform:uppercase">Display Font</label>
+              <input type="text" data-token="typography.fontDisplay" value="Inter" style="width:100%; padding:8px 10px; border:1px solid var(--color-border); border-radius:var(--radius-sm); font-size:12px; font-family:var(--font-display); background:var(--color-surface-2); color:var(--color-text); outline:none" />
+            </div>
+            <!-- Body Font -->
+            <div style="flex:1">
+              <label style="font-size:10px; color:var(--color-text-faint); display:block; margin-bottom:6px; font-weight:600; text-transform:uppercase">Body Font</label>
+              <input type="text" data-token="typography.fontBody" value="Roboto" style="width:100%; padding:8px 10px; border:1px solid var(--color-border); border-radius:var(--radius-sm); font-size:12px; font-family:var(--font-body); background:var(--color-surface-2); color:var(--color-text); outline:none" />
+            </div>
+          </div>
+          <div style="font-size:10px; color:var(--color-text-muted); margin-top:12px; line-height:1.4">
+            * <b>Note:</b> Connecting strictly to the Google Fonts Library.
+          </div>
+       </div>
+
+       <div style="width:1px; background:var(--color-divider); align-self:stretch; margin:0 8px"></div>
+
+       <!-- Box Model Container -->
+       <div style="flex:1">
+          <div class="panel-heading" style="margin-bottom:20px; padding:0; border:none">Layout & Isolation</div>
+          
+          <div style="display:flex; gap:24px; margin-bottom:16px">
+            <!-- Spacing -->
+            <div style="flex:1; display:flex; flex-direction:column; gap:8px">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label style="font-size:10px; color:var(--color-text-faint); font-weight:600; text-transform:uppercase">Base Gaps</label>
+                <input type="text" id="spacing-input-text" data-token="spacing.s4" value="1rem" style="width:48px; font-size:10px; padding:2px; text-align:center; border:1px solid var(--color-border); border-radius:4px; background:var(--color-surface-2); color:var(--color-text); outline:none" />
+              </div>
+              <input type="range" id="spacing-slider" min="4" max="48" step="1" value="16" />
+            </div>
+
+            <!-- Radius -->
+            <div style="flex:1; display:flex; flex-direction:column; gap:8px">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label style="font-size:10px; color:var(--color-text-faint); font-weight:600; text-transform:uppercase">Cornering</label>
+                <input type="text" id="radius-input-text" data-token="radius.md" value="0.5rem" style="width:48px; font-size:10px; padding:2px; text-align:center; border:1px solid var(--color-border); border-radius:4px; background:var(--color-surface-2); color:var(--color-text); outline:none" />
+              </div>
+              <input type="range" id="radius-slider" min="0" max="32" step="1" value="8" />
+            </div>
+          </div>
+
+          <!-- Base Shadow -->
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <label style="font-size:10px; color:var(--color-text-faint); font-weight:600; text-transform:uppercase">Elevation Matrix</label>
+            <input type="text" data-token="shadow.md" value="0 4px 6px rgba(0,0,0,0.1)" style="width:100%; font-size:11px; padding:6px 8px; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-surface-2); color:var(--color-text); outline:none" />
+          </div>
+       </div>
+    </div>
+
     <div class="device-frame device-mobile" id="device-frame">
 
       <!-- Web bar (shown for device-web only) -->
@@ -121,48 +180,48 @@
       <div class="device-screen">
 
         <!-- App Bar -->
-        <div class="preview-section" style="padding:16px;background:var(--color-surface);
+        <div class="preview-section" style="padding:var(--space-4);background:var(--color-surface);
           border-bottom:1px solid var(--color-border);display:flex;
           align-items:center;justify-content:space-between;">
           <span style="font-family:var(--font-display);font-weight:700;
             font-size:17px;color:var(--color-text)" id="screen-appname">My App</span>
-          <div style="display:flex;gap:8px">
+          <div style="display:flex;gap:var(--space-2)">
             <span class="preview-badge badge-success">Active</span>
           </div>
         </div>
 
         <!-- Hero card -->
-        <div class="preview-section">
+        <div class="preview-section" style="padding:var(--space-6) var(--space-4)">
           <div class="preview-label">Featured</div>
-          <div class="preview-card">
+          <div class="preview-card" style="padding:var(--space-4); margin-bottom:var(--space-2)">
             <div class="preview-title" style="font-size:18px">Welcome back</div>
             <div class="preview-body">Here is what is happening today across your workspace.</div>
-            <div class="preview-btn-row">
-              <button class="preview-btn preview-btn-primary">Get started</button>
-              <button class="preview-btn preview-btn-ghost">Learn more</button>
+            <div class="preview-btn-row" style="display:flex; gap:var(--space-2); margin-top:var(--space-3)">
+              <button class="preview-btn preview-btn-primary" style="padding:var(--space-2) var(--space-4)">Get started</button>
+              <button class="preview-btn preview-btn-ghost" style="padding:var(--space-2) var(--space-4)">Learn more</button>
             </div>
           </div>
         </div>
 
         <!-- Stats row -->
-        <div class="preview-section">
+        <div class="preview-section" style="padding:var(--space-6) var(--space-4)">
           <div class="preview-label">Overview</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-            <div class="preview-card" style="padding:12px">
-              <div style="font-size:11px;color:var(--color-text-faint);margin-bottom:4px">TASKS</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2)">
+            <div class="preview-card" style="padding:var(--space-3)">
+              <div style="font-size:11px;color:var(--color-text-faint);margin-bottom:var(--space-1)">TASKS</div>
               <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--color-text)">24</div>
             </div>
-            <div class="preview-card" style="padding:12px">
-              <div style="font-size:11px;color:var(--color-text-faint);margin-bottom:4px">DONE</div>
+            <div class="preview-card" style="padding:var(--space-3)">
+              <div style="font-size:11px;color:var(--color-text-faint);margin-bottom:var(--space-1)">DONE</div>
               <div style="font-size:22px;font-weight:700;font-family:var(--font-display);color:var(--color-success)">18</div>
             </div>
           </div>
         </div>
 
         <!-- Input -->
-        <div class="preview-section">
+        <div class="preview-section" style="padding:var(--space-6) var(--space-4)">
           <div class="preview-label">Quick add</div>
-          <input class="preview-input" placeholder="Type a task name..." />
+          <input class="preview-input" placeholder="Type a task name..." style="padding:var(--space-2) var(--space-3); margin-bottom:var(--space-2)" />
           <div style="display:flex;gap:6px">
             <span class="preview-badge badge-success">✓ Done</span>
             <span class="preview-badge badge-warning">⏳ Pending</span>
@@ -171,9 +230,9 @@
         </div>
 
         <!-- List -->
-        <div class="preview-section">
+        <div class="preview-section" style="padding:var(--space-6) var(--space-4)">
           <div class="preview-label">Recent</div>
-          <div class="preview-card" style="padding:12px 16px;display:flex;
+          <div class="preview-card" style="padding:var(--space-3) var(--space-4); display:flex;
             justify-content:space-between;align-items:center;">
             <div>
               <div style="font-size:14px;font-weight:500;color:var(--color-text)">Design system review</div>
@@ -181,8 +240,8 @@
             </div>
             <span class="preview-badge badge-success">Done</span>
           </div>
-          <div class="preview-card" style="padding:12px 16px;display:flex;
-            justify-content:space-between;align-items:center;margin-top:4px">
+          <div class="preview-card" style="padding:var(--space-3) var(--space-4); display:flex;
+            justify-content:space-between;align-items:center;margin-top:var(--space-1)">
             <div>
               <div style="font-size:14px;font-weight:500;color:var(--color-text)">Ship preview feature</div>
               <div style="font-size:12px;color:var(--color-text-muted)">Tomorrow</div>
@@ -261,6 +320,29 @@
 <script type="module" src="app.js"></script>
 
 <script>
+  // Sync Sliders
+  setTimeout(() => {
+    const parseToPx = (v) => { v=String(v).toLowerCase(); return v.includes('rem')||v.includes('em') ? parseFloat(v)*16 : parseFloat(v)||0; };
+    
+    // Spacing
+    const sSlider = document.getElementById('spacing-slider');
+    const sInput = document.getElementById('spacing-input-text');
+    if(sSlider && sInput) {
+      sSlider.value = parseToPx(sInput.value) || 16;
+      sSlider.addEventListener('input', (e) => { sInput.value = e.target.value + 'px'; sInput.dispatchEvent(new Event('input', { bubbles: true })); });
+      sInput.addEventListener('input', (e) => { sSlider.value = parseToPx(e.target.value); });
+    }
+    
+    // Radius
+    const rSlider = document.getElementById('radius-slider');
+    const rInput = document.getElementById('radius-input-text');
+    if(rSlider && rInput) {
+      rSlider.value = parseToPx(rInput.value) || 8;
+      rSlider.addEventListener('input', (e) => { rInput.value = e.target.value + 'px'; rInput.dispatchEvent(new Event('input', { bubbles: true })); });
+      rInput.addEventListener('input', (e) => { rSlider.value = parseToPx(e.target.value); });
+    }
+  }, 500);
+
   // Sync hex labels on color picker input
   document.querySelectorAll('input[type=color]').forEach(input => {
     const hex = input.nextElementSibling;

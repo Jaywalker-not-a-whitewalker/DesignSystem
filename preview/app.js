@@ -147,14 +147,59 @@ function applyTokens() {
     '--color-warning': c.warning, '--color-success': c.success,
     '--font-display': `'${state.typography.fontDisplay}', sans-serif`,
     '--font-body': `'${state.typography.fontBody}', sans-serif`,
-    '--space-4': state.spacing.s4, '--space-8': state.spacing.s8,
-    '--space-12': state.spacing.s12, '--space-16': state.spacing.s16,
-    '--radius-sm': state.radius.sm, '--radius-md': state.radius.md,
-    '--radius-lg': state.radius.lg, '--radius-xl': state.radius.xl,
     '--shadow-sm': state.shadow.sm, '--shadow-md': state.shadow.md,
     '--shadow-lg': state.shadow.lg,
   };
-  for (const [k, v] of Object.entries(entries)) root.style.setProperty(k, v);
+
+  // Dynamically calculate the full radius scale from Base Radius (md)
+  const baseRadius = state.radius.md || '8px';
+  const rMatch = String(baseRadius).trim().match(/^([\d\.]+)([a-zA-Z%]*)$/);
+  if (rMatch) {
+    const val = parseFloat(rMatch[1]);
+    const unit = rMatch[2] || 'px'; 
+    const rMult = (scale) => `${+(val * scale).toFixed(4)}${unit}`;
+    entries['--radius-sm'] = rMult(0.75);
+    entries['--radius-md'] = rMult(1);
+    entries['--radius-lg'] = rMult(1.5);
+    entries['--radius-xl'] = rMult(2);
+    
+    state.radius.sm = entries['--radius-sm'];
+    state.radius.md = entries['--radius-md'];
+    state.radius.lg = entries['--radius-lg'];
+    state.radius.xl = entries['--radius-xl'];
+  }
+
+  // Dynamically calculate the full spacing scale from Base Spacing (s4)
+  const baseSpace = state.spacing.s4 || '16px';
+  entries['--space-base'] = baseSpace;
+  const match = String(baseSpace).trim().match(/^([\d\.]+)([a-zA-Z%]*)$/);
+  if (match) {
+    const val = parseFloat(match[1]);
+    const unit = match[2] || 'px'; // Fallback to px if user types raw numbers or decimals
+    const mult = (scale) => `${+(val * scale).toFixed(4)}${unit}`;
+    entries['--space-1'] = mult(0.25);
+    entries['--space-2'] = mult(0.5);
+    entries['--space-3'] = mult(0.75);
+    entries['--space-4'] = mult(1);
+    entries['--space-6'] = mult(1.5);
+    entries['--space-8'] = mult(2);
+    entries['--space-12']= mult(3);
+    entries['--space-16']= mult(4);
+    
+    // Update internal state dictionary so exporters get the calculated values
+    state.spacing.s1 = entries['--space-1'];
+    state.spacing.s2 = entries['--space-2'];
+    state.spacing.s3 = entries['--space-3'];
+    state.spacing.s4 = entries['--space-4'];
+    state.spacing.s6 = entries['--space-6'];
+    state.spacing.s8 = entries['--space-8'];
+    state.spacing.s12= entries['--space-12'];
+    state.spacing.s16= entries['--space-16'];
+  }
+
+  for (const [k, v] of Object.entries(entries)) {
+    root.style.setProperty(k, v);
+  }
 }
 
 // ── Contrast checker (WCAG relative luminance) ────────────────
@@ -206,13 +251,20 @@ function renderAudit() {
   `).join('');
 }
 
-// ── Color picker binding ──────────────────────────────────────
-function bindColorPickers() {
+// ── Generic Input Binding ──────────────────────────────────────
+function bindInputs() {
   document.querySelectorAll('[data-token]').forEach(el => {
     el.addEventListener('input', e => {
-      const [mode, key] = e.target.dataset.token.split('.');
-      state.color[mode][key] = e.target.value;
+      const parts = e.target.dataset.token.split('.');
+      let obj = state;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!obj[parts[i]]) obj[parts[i]] = {};
+        obj = obj[parts[i]];
+      }
+      obj[parts[parts.length - 1]] = e.target.value;
+      
       applyTokens();
+      applyFontCDN();
       renderAudit();
       updateSwatches();
       scheduleSync(); // write to disk
@@ -222,10 +274,19 @@ function bindColorPickers() {
 
 function updateSwatches() {
   document.querySelectorAll('[data-token]').forEach(el => {
-    const [mode, key] = el.dataset.token.split('.');
-    el.value = state.color[mode][key];
-    const hex = el.nextElementSibling;
-    if (hex) hex.textContent = state.color[mode][key];
+    const parts = el.dataset.token.split('.');
+    let val = state;
+    for (let i = 0; i < parts.length; i++) {
+      if (!val) break;
+      val = val[parts[i]];
+    }
+    if (val !== undefined && val !== null) {
+      el.value = val;
+      if (el.type === 'color') {
+        const hex = el.nextElementSibling;
+        if (hex && hex.classList.contains('color-hex')) hex.textContent = val;
+      }
+    }
   });
 }
 
@@ -291,8 +352,13 @@ function initExports() {
 // ── Spacing audit ─────────────────────────────────────────────
 function runSpacingAudit() {
   const validGrid = [4,8,12,16,20,24,32,40,48,56,64,80,96];
+  const parseToPx = (v) => {
+    v = String(v).toLowerCase();
+    if (v.includes('rem') || v.includes('em')) return parseFloat(v) * 16;
+    return parseFloat(v) || 0;
+  };
   const tokens = Object.entries(state.spacing).map(([k,v]) => {
-    const px = Math.round(parseFloat(v) * 16);
+    const px = Math.round(parseToPx(v));
     return { key: k, value: v, px, pass: validGrid.includes(px) };
   });
   const container = document.getElementById('spacing-audit');
@@ -308,6 +374,30 @@ function runSpacingAudit() {
 
 // ── Font CDN swap ─────────────────────────────────────────────
 function applyFontCDN() {
+  // Auto-inject Google Fonts dynamically based on currently typed font families
+  let gLink = document.getElementById('dynamic-google-fonts');
+  if (!gLink) {
+    gLink = document.createElement('link');
+    gLink.id = 'dynamic-google-fonts';
+    gLink.rel = 'stylesheet';
+    document.head.appendChild(gLink);
+  }
+  
+  // Google Fonts API is strictly case-sensitive and requires Title Case
+  const toTitleCase = str => str.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('+');
+
+  const d = state.typography.fontDisplay ? toTitleCase(state.typography.fontDisplay) : '';
+  const b = state.typography.fontBody ? toTitleCase(state.typography.fontBody) : '';
+  
+  const families = Array.from(new Set([d, b]))
+    .filter(f => f && f.toLowerCase() !== 'satoshi' && f.toLowerCase() !== 'system-ui')
+    .map(f => `family=${f}:wght@400;500;600;700`).join('&');
+    
+  if (families) {
+    gLink.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
+  }
+
+  // Preserve the original explicit CDN link if one existed
   const link = document.getElementById('font-cdn');
   if (link && state.typography.fontCDN) link.href = state.typography.fontCDN;
 }
@@ -344,7 +434,7 @@ async function init() {
   applyFontCDN();
   applyTokens();
   updateSwatches();
-  bindColorPickers();
+  bindInputs();
   initThemeToggle();
   initExports();
   renderAudit();
