@@ -315,6 +315,24 @@ function applyFontCDN() {
 // ── Init ─────────────────────────────────────────────────────
 async function init() {
   await checkServer();
+  
+  if (SERVER_AVAILABLE) {
+    try {
+      const res = await fetch('/design-tokens.json');
+      if (res.ok) {
+        const diskState = await res.json();
+        if (diskState.meta) state.meta = diskState.meta;
+        if (diskState.color) state.color = diskState.color;
+        if (diskState.typography) state.typography = diskState.typography;
+        if (diskState.spacing) state.spacing = diskState.spacing;
+        if (diskState.radius) state.radius = diskState.radius;
+        if (diskState.shadow) state.shadow = diskState.shadow;
+      }
+    } catch (e) {
+      console.warn('Could not load tokens from disk', e);
+    }
+  }
+
   initFormFactor();
   applyFontCDN();
   applyTokens();

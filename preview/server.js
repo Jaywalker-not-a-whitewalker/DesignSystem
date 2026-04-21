@@ -80,15 +80,43 @@ const server = http.createServer((req, res) => {
   }
 
   // ── Serve static preview files ────────────────────────────────
-  let filePath = parsed.pathname === '/' ? '/index.html' : parsed.pathname;
-  filePath = path.join(PREVIEW_DIR, filePath);
+  let filePath;
+  let isPreviewHtml = false;
+
+  if (parsed.pathname === '/' || parsed.pathname === '/preview.html' || parsed.pathname === '/index.html') {
+    const rootPreview = path.join(PROJECT_ROOT, 'preview.html');
+    if (fs.existsSync(rootPreview)) {
+      filePath = rootPreview;
+      isPreviewHtml = true;
+    } else {
+      filePath = path.join(PREVIEW_DIR, 'index.html');
+    }
+  } else if (parsed.pathname === '/design-tokens.json') {
+    const rootTokens = path.join(PROJECT_ROOT, 'design-tokens.json');
+    if (fs.existsSync(rootTokens)) {
+      filePath = rootTokens;
+    } else {
+      res.writeHead(404); res.end('Not found'); return;
+    }
+  } else {
+    filePath = path.join(PREVIEW_DIR, parsed.pathname);
+  }
 
   fs.readFile(filePath, (err, data) => {
     if (err) { res.writeHead(404); res.end('Not found'); return; }
+    
+    let content = data;
+    if (isPreviewHtml) {
+      // Auto-heal 'file:///' URIs that models often mistakenly generate for preview assets
+      let html = data.toString('utf8');
+      html = html.replace(/(href|src)="file:\/\/[^"]*?\/preview\/([^"]+)"/g, '$1="$2"');
+      content = Buffer.from(html, 'utf8');
+    }
+
     const ext  = path.extname(filePath);
     const mime = MIME[ext] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': mime });
-    res.end(data);
+    res.end(content);
   });
 });
 

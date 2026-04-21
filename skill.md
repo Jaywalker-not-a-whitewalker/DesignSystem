@@ -409,16 +409,20 @@ Replace the placeholders in the template:
 
 Write the modified HTML to `preview.html` in the **project root directory** (not in ~/.design-system/).
 
+**IMPORTANT HTML GENERATION RULES:**
+1. You may completely rewrite the content inside `<div class="device-screen">` to match the user's specific app domain (e.g., adding mock graphs, tables, or specialized UI that fits their vibe).
+2. **DO NOT DELETE, SUMMARIZE, OR TRUNCATE** the `<aside id="panel-tokens">` (left side) and `<aside id="panel-audit">` (right side) elements. You must copy every single color picker row and button exactly as it appears in the original template. Do not omit `warning`, `error`, `surface2`, or any other color attributes.
+
 ### Step 5: Inform the user
 
 Tell the user:
 ```
 Preview generated: preview.html
 
-To view it:
-  1. Open preview.html in a browser, OR
-  2. Run: node ~/.design-system/preview/server.js --project .
-     Then open: http://localhost:7743
+To view the interactive design dashboard, run the local preview server:
+  node ~/.design-system/preview/server.js --project .
+  
+Then open: http://localhost:7743
 ```
 
 **IMPORTANT:** Do not try to generate the preview from scratch. The template already has all the UI, styling, contrast checking, and export logic built-in. Your only job is to inject the DESIGN_TOKENS object.
