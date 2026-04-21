@@ -413,17 +413,22 @@ Write the modified HTML to `preview.html` in the **project root directory** (not
 1. You may completely rewrite the content inside `<div class="device-screen">` to match the user's specific app domain (e.g., adding mock graphs, tables, or specialized UI that fits their vibe).
 2. **DO NOT DELETE, SUMMARIZE, OR TRUNCATE** the `<aside id="panel-tokens">` (left side) and `<aside id="panel-audit">` (right side) elements. You must copy every single color picker row and button exactly as it appears in the original template. Do not omit `warning`, `error`, `surface2`, or any other color attributes.
 
-### Step 5: Inform the user
+### Step 5: Start the Server & Inform the user
 
-Tell the user:
+If you have terminal/shell execution capabilities, **automatically run the preview server** in the background for the user:
+```bash
+node ~/.design-system/preview/server.js --project .
+```
+
+Then tell the user:
 ```
 Preview generated: preview.html
 
-To view the interactive design dashboard, run the local preview server:
-  node ~/.design-system/preview/server.js --project .
-  
-Then open: http://localhost:7743
+The interactive design dashboard is running automatically. You can view it here:
+http://localhost:7743
 ```
+
+*(If you do NOT have terminal execution capabilities, instead give the user the `node` command to run manually.)*
 
 **IMPORTANT:** Do not try to generate the preview from scratch. The template already has all the UI, styling, contrast checking, and export logic built-in. Your only job is to inject the DESIGN_TOKENS object.
 
