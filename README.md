@@ -35,9 +35,9 @@ The skill then generates (based on your chosen output format):
 
 - `design-tokens.json` — canonical token source (always generated first)
 - `Design.md` — your complete design system
-- `preview.html` — interactive HTML with token panel, component showcase, and developer toggles
 - `tailwind.config.js` — Tailwind CSS token mapping
 - Flutter `ThemeData` — Dart theme file
+- Local Preview Server — run `node ~/.design-system/preview/server.js --project .` to view tokens
 - `AGENTS.md` — always-on hook for Claude, Codex, OpenCode, Aider, Trae, Hermes
 - `.agent/rules/design-system.md` — Google Antigravity always-on rules
 - `.agent/workflows/design-system.md` — Google Antigravity `/design` slash command
@@ -149,7 +149,7 @@ AUTO-FIX? [y/n]
 
 **Contrast** — WCAG AA mandatory everywhere. Body text 4.5:1 minimum. Large text 3:1 minimum.
 
-**Reasoning transparency** — Every design decision includes a stated rationale. HTML previews include `<!-- WHY -->` annotations explaining spacing, font, and color choices.
+**Reasoning transparency** — Every design decision includes a stated rationale. `Design.md` includes reasoning annotations explaining spacing, font, and color choices.
 
 **Anti-patterns blocked** — Gradient backgrounds, colored card borders, 3-column identical feature grids, center-aligned body text, arbitrary spacing, generic AI hero copy.
 
