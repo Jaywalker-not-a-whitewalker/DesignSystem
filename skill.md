@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: "Generates production-ready design systems with tokens-first architecture, atomic components, and HTML preview for websites, mobile apps, and wearables. Runs 6-step onboarding (form factor, app type, framework, identity, visual reference, color direction) and produces design-tokens.json, Design.md, and preview.html."
+description: "Generates production-ready design systems with tokens-first architecture and atomic components for websites, mobile apps, and wearables. Runs 6-step onboarding (form factor, app type, framework, identity, visual reference, color direction) and produces design-tokens.json and Design.md."
 risk: safe
 date_added: "2026-04-20"
 ---
@@ -169,12 +169,11 @@ For every palette proposed:
 
 - [ ] `design-tokens.json` (default — always included)
 - [ ] `Design.md` — full design system documentation
-- [ ] HTML Preview — interactive visual reference with developer options
 - [ ] `tailwind.config.js` — Tailwind CSS token mapping
 - [ ] Flutter `ThemeData` — Dart theme file
 - [ ] Component scaffold — list of atoms/molecules/organisms with specs
 
-Default if not answered: generate `design-tokens.json` + `Design.md` + HTML Preview.
+Default if not answered: generate `design-tokens.json` + `Design.md`.
 
 ---
 
@@ -310,107 +309,11 @@ Structure of the generated `Design.md`:
 
 ---
 
-## Phase 4 — HTML Preview Generation
+## Phase 4 — Local Preview Server
 
-**How to generate the HTML preview:**
+**How to start the interactive preview:**
 
-The preview system uses a template-based approach. Follow these exact steps:
-
-### Step 1: Read the template
-
-Read the file from `~/.design-system/preview/index.html`. This template contains:
-- `<!--TOKENS_SCRIPT-->` — placeholder for injecting the DESIGN_TOKENS JavaScript object
-- `<!--APP_NAME-->` — placeholder for the app name
-- Pre-wired UI with `app.js`, `style.css`, and all interactive components already built
-
-### Step 2: Build the DESIGN_TOKENS object
-
-Create a JavaScript object containing all the design tokens you generated in Phase 1:
-
-```javascript
-const DESIGN_TOKENS = {
-  meta: {
-    appName: "...",
-    formFactor: "...",
-    appType: "...",
-    framework: "...",
-    targetUser: "...",
-    coreAction: "...",
-    vibeWords: "..."
-  },
-  color: {
-    light: {
-bg: "#...",
-        surface: "#...",
-        surface2: "#...",
-        surfaceOffset: "#...",
-        text: "#...",
-        textMuted: "#...",
-        textFaint: "#...",
-        primary: "#...",
-        primaryHover: "#...",
-        error: "#...",
-        warning: "#...",
-        success: "#..."
-    dark: {
-bg: "#...",
-        surface: "#...",
-        surface2: "#...",
-        surfaceOffset: "#...",
-        text: "#...",
-        textMuted: "#...",
-        textFaint: "#...",
-        primary: "#...",
-        primaryHover: "#...",
-        error: "#...",
-        warning: "#...",
-        success: "#..."
-      }
-  },
-  typography: {
-    fontDisplay: "...",
-      fontBody: "...",
-      fontCDN: "...",
-      scale: { xs: "...", sm: "...", base: "...", lg: "...", xl: "...", "2xl": "..." }
-    },
-    spacing: {
-      s1: "0.25rem", s2: "0.5rem", s3: "0.75rem", s4: "1rem",
-      s6: "1.5rem", s8: "2rem", s12: "3rem", s16: "4rem",
-      s20: "5rem", s24: "6rem"
-    },
-    radius: {
-      sm: "0.375rem", md: "0.5rem", lg: "0.75rem", xl: "1rem"
-    },
-    shadow: {
-      sm: "...", md: "...", lg: "..."
-    }
-  }
-};
-```
-
-### Step 3: Inject tokens into template
-
-Replace the placeholders in the template:
-
-1. Replace `<!--TOKENS_SCRIPT-->` with:
-   ```html
-   <script>
-   const DESIGN_TOKENS = { /* full object from Step 2 */ };
-   </script>
-   ```
-
-2. Replace `<!--APP_NAME-->` with the actual app name from `DESIGN_TOKENS.meta.appName`
-
-### Step 4: Write the preview file
-
-Write the modified HTML to `designSystem-Out/preview.html` relative to the **project root directory** (create the `designSystem-Out` folder if it doesn't exist). Do not write to `~/.design-system/`.
-
-**IMPORTANT HTML GENERATION RULES:**
-1. You may completely rewrite the content inside `<div class="device-screen">` to match the user's specific app domain (e.g., adding mock graphs, tables, or specialized UI that fits their vibe).
-2. **DO NOT DELETE, SUMMARIZE, OR TRUNCATE** the `<aside id="panel-tokens">` (left side) and `<aside id="panel-audit">` (right side) elements. You must copy every single color picker row and button exactly as it appears in the original template. Do not omit `warning`, `error`, `surface2`, or any other color attributes.
-
-### Step 5: Start the Server & Inform the user
-
+After generating tokens, you must instruct the user to run the preview server to visualize them. 
 If you have terminal/shell execution capabilities, **automatically run the preview server** in the background for the user:
 ```bash
 node ~/.design-system/preview/server.js --project .
@@ -418,21 +321,10 @@ node ~/.design-system/preview/server.js --project .
 
 Then tell the user:
 ```
-Preview generated: preview.html
-
-The interactive design dashboard is running automatically. You can view it here:
+The interactive design dashboard is running automatically. You can view your tokens here:
 http://localhost:7743
 ```
-
 *(If you do NOT have terminal execution capabilities, instead give the user the `node` command to run manually.)*
-
-**IMPORTANT:** Do not try to generate the preview from scratch. The template already has all the UI, styling, contrast checking, and export logic built-in. Your only job is to inject the DESIGN_TOKENS object.
-
-### Reasoning Transparency in HTML:
-Every section must include an expandable `<!-- WHY -->` comment or on-page tooltip explaining:
-- Why this spacing value was chosen
-- Why this font pairing was selected
-- Why this color contrast meets accessibility standards
 
 ---
 
@@ -442,8 +334,7 @@ When the user provides updates (new brand color, changed app name, new component
 
 1. Update `design-tokens.json` first
 2. Cascade changes to `Design.md`
-3. Regenerate affected HTML preview sections
-4. Report what changed and why in a diff summary
+3. Report what changed and why in a diff summary
 
 ---
 
